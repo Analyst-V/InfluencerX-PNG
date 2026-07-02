@@ -36,8 +36,8 @@ import clsx from 'clsx';
 const KPI_DATA = [
   {
     id: 1,
-    label: 'Est. Pipeline Value',
-    subLabel: 'ROI from recent B2B campaigns',
+    label: 'Est. Sales Lift',
+    subLabel: 'ROI from recent JP/KR campaigns',
     value: '$1.2M',
     growth: '+12%',
     icon: DollarSign,
@@ -46,7 +46,7 @@ const KPI_DATA = [
   },
   {
     id: 2,
-    label: 'Innovation Sentiment',
+    label: 'Brand Sentiment',
     subLabel: 'Brand Lift vs. Competitors',
     value: '+12%',
     growth: '+12%',
@@ -67,7 +67,7 @@ const KPI_DATA = [
   {
     id: 4,
     label: 'Audience Reach',
-    subLabel: 'Unique IT Decision Makers',
+    subLabel: 'Unique Beauty Consumers Reached (KR/JP)',
     value: '850k',
     growth: '+12%',
     icon: Sparkles,
@@ -94,9 +94,9 @@ const CHANNEL_DATA = [
 const INFLUENCER_PERFORMANCE = [
   {
     id: 1,
-    name: 'Marques Brownlee',
-    platform: 'YouTube',
-    content: 'Review: Professional Series X1',
+    name: '@SeoulGlow_Joo',
+    platform: 'TikTok',
+    content: 'Before/After: Miracles Glass Hair Shine',
     status: 'Live',
     views: '2.1M',
     conversions: '4.5%',
@@ -104,9 +104,9 @@ const INFLUENCER_PERFORMANCE = [
   },
   {
     id: 2,
-    name: 'Dave2D',
+    name: 'SakuraBeauty_Vlogs',
     platform: 'YouTube',
-    content: 'Deep Dive: NPU Performance',
+    content: 'My Micellar Scalp Care Routine',
     status: 'Live',
     views: '1.2M',
     conversions: '5.2%',
@@ -114,9 +114,9 @@ const INFLUENCER_PERFORMANCE = [
   },
   {
     id: 3,
-    name: 'TechLinked',
-    platform: 'YouTube',
-    content: 'News Segment: Copilot+',
+    name: 'K-Hair Diary (Naver)',
+    platform: 'Naver Blog',
+    content: 'Review: Nutrient Blends 14-Day Challenge',
     status: 'Live',
     views: '850K',
     conversions: '3.1%',
@@ -124,9 +124,9 @@ const INFLUENCER_PERFORMANCE = [
   },
   {
     id: 4,
-    name: 'Linus Tech Tips',
-    platform: 'YouTube',
-    content: 'Stress Test: Extreme Conditions',
+    name: '@Aika_Styles',
+    platform: 'Instagram',
+    content: 'Pro-V Deep Repair - First Impressions',
     status: 'Scheduled',
     views: '-',
     conversions: '-',
@@ -183,7 +183,7 @@ export const MonitorModule = () => {
               <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse" /> Live Monitoring
             </span>
           </div>
-          <p className="text-gray-500">Real-time performance tracking for "AI Performance" Campaign.</p>
+          <p className="text-gray-500">Real-time performance tracking for "Glass Hair Awareness" Campaign.</p>
         </div>
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-colors shadow-sm">
@@ -376,29 +376,6 @@ export const MonitorModule = () => {
         </div>
       </div>
 
-      {/* Adaptive Learning Banner - Fixed Bottom */}
-      <motion.div 
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 100 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl bg-[#1C1C1C] text-white p-4 rounded-xl shadow-2xl flex items-start gap-4 border border-gray-800 z-50"
-      >
-        <div className="p-2 bg-[#2563EB]/20 rounded-lg text-[#2563EB]">
-          <Sparkles size={24} />
-        </div>
-        <div>
-          <h4 className="font-bold text-sm mb-1 flex items-center gap-2">
-            Adaptive Learning Active
-            <span className="px-1.5 py-0.5 rounded bg-green-900/50 text-green-400 text-[9px] uppercase tracking-wider font-bold border border-green-800">System Update</span>
-          </h4>
-          <p className="text-xs text-gray-400 leading-relaxed max-w-3xl">
-            Based on current campaign data, the engine has updated the <span className="text-white font-bold">'Discover' algorithm</span> to prioritize <span className="text-[#2563EB] font-bold">LinkedIn Tech Reviewers</span> for future B2B campaigns, as they are showing a <span className="text-white font-bold">35% higher ROI</span> than other segments for this product category.
-          </p>
-        </div>
-        <button className="ml-auto text-xs font-bold text-gray-400 hover:text-white underline mt-1">
-          View Analysis
-        </button>
-      </motion.div>
     </div>
   );
 };

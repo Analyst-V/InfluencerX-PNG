@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { activeBrand } from './data/brandConfig';
 
 import { Shell } from './components/Shell';
 import { DiscoverModule } from './components/DiscoverModule';
@@ -25,18 +26,23 @@ export interface CampaignContext {
   targetGeography?: string;
   campaignDescription?: string;
   creatorTier?: string;
+  // Discovery -> Recommend helper fields
+  themeName?: string;
+  sentiment?: 'Positive' | 'Negative' | 'Neutral' | string;
+  insight?: string;
+  sourceModule?: string;
 }
 const App = () => {
-  const [activeModule, setActiveModule] = useState<'Discover' | 'Recommend' | 'Create' | 'Monitor'>('Discover');
+  const [activeModule, setActiveModule] = useState<'Discover' | 'Recommend' | 'Plan' | 'Monitor'>('Discover');
   const [showLanding, setShowLanding] = useState(true);
   const [campaignContext, setCampaignContext] = useState<CampaignContext | null>(null);
   const [discoverViewMode, setDiscoverViewMode] = useState<'consumer-themes' | 'market-trends'>('consumer-themes');
 
   // Discover Filter State
-  const [region, setRegion] = useState('Global');
+  const [region, setRegion] = useState(activeBrand?.defaultMarket || 'Japan');
   const [period, setPeriod] = useState('Last 30 Days');
   const [channel, setChannel] = useState('All Channels');
-  const [product, setProduct] = useState('Professional');
+  const [product, setProduct] = useState('Pro-V');
 
   const handleNavigateToRecommend = (context: CampaignContext) => {
     setCampaignContext(context);
@@ -45,7 +51,7 @@ const App = () => {
 
   const handleNavigateToCreate = (context: CampaignContext) => {
     setCampaignContext(prev => ({ ...prev, ...context }));
-    setActiveModule('Create');
+    setActiveModule('Plan');
   };
 
   const handleLogout = () => {
@@ -61,7 +67,7 @@ const App = () => {
         return <DiscoverModule onNavigateToRecommend={handleNavigateToRecommend} viewMode={discoverViewMode} />;
       case 'Recommend':
         return <RecommendModule initialContext={campaignContext} onNavigateToCreate={handleNavigateToCreate} onBack={() => setActiveModule('Discover')} />;
-      case 'Create':
+      case 'Plan':
         return <CreateModule initialContext={campaignContext} onBack={() => setActiveModule('Recommend')} />;
       case 'Monitor':
         return <MonitorModule />;

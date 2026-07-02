@@ -41,6 +41,7 @@ import {
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
 import { CampaignContext } from '../App';
+import { activeBrand } from '../data/brandConfig';
 import {
   ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig,
 } from '../components/ui/chart';
@@ -54,7 +55,6 @@ import { Checkbox } from '../components/ui/checkbox';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '../components/ui/table';
-import { AssetGeneratorModal } from './AssetGeneratorModal';
 
 // --- Types ---
 
@@ -183,7 +183,6 @@ export const CreateModule = ({
     onBack?: () => void
 }) => {
     // State
-    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
     const [influencers, setInfluencers] = useState<Influencer[]>(initialContext?.selectedInfluencers || []);
     const [activeInfluencerId, setActiveInfluencerId] = useState<string | null>(influencers[0]?.id || null);
     
@@ -306,7 +305,7 @@ useEffect(() => {
                     script: null,
                     assets: [],
                     emailDraft: {
-                        subject: `Partnership: ${inf.name} x ${initialContext?.brand || 'Lenovo'}`,
+                        subject: `Partnership: ${inf.name} x ${initialContext?.brand || activeBrand.brandName}`,
                         body: DEFAULT_EMAIL_TEMPLATE(inf.name.split(' ')[0], initialContext?.productFocus || "Professional Series")
                     },
                     currentStep: 'script'
@@ -353,19 +352,6 @@ useEffect(() => {
     });
   }, 1500);
 };
-
-    const handleSaveAssets = (newAssets: Asset[]) => {
-        if (!activeInfluencerId || !activeData) return;
-
-        const updatedWorkspaceAssets = [
-            ...activeData.assets,
-            ...newAssets.map(a => ({ ...a, isSelected: true }))
-        ];
-        
-        updateWorkspace(activeInfluencerId, { assets: updatedWorkspaceAssets });
-        setGlobalAssets(prev => [...newAssets, ...prev]);
-        setIsGeneratorOpen(false);
-    };
 
     const toggleAssetSelection = (assetId: string) => {
         if (!activeInfluencerId || !activeData) return;
@@ -541,7 +527,7 @@ useEffect(() => {
                         <div className="flex items-center gap-3 mb-2">
                             <h1 className="text-4xl font-bold tracking-tight text-[#1C1C1C]">Campaign Execution</h1>
                             <span className="px-3 py-1 rounded-full bg-[#2563EB]/10 text-xs font-bold text-[#2563EB] uppercase tracking-wider flex items-center gap-1.5">
-                                <Sparkles size={12} fill="currentColor" /> {initialContext?.brand || 'Lenovo'}: {initialContext?.productFocus}
+                                <Sparkles size={12} fill="currentColor" /> {initialContext?.brand || activeBrand.brandName}: {initialContext?.productFocus}
                             </span>
                         </div>
                         <p className="text-gray-500 text-lg">
@@ -1000,17 +986,6 @@ useEffect(() => {
                                     >
                                         <div className="flex justify-between items-center">
                                             <h4 className="font-bold text-[#1C1C1C]">Asset Library</h4>
-                                            <button 
-                                                onClick={() => setIsGeneratorOpen(true)}
-                                                className="relative group px-5 py-2 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 shadow-[0_0_20px_rgba(37,99,235,0.4)] border border-[#2563EB]/50 bg-black/40 backdrop-blur-xl"
-                                            >
-                                                <div className="absolute inset-0 bg-gradient-to-r from-[#2563EB]/20 via-[#2563EB]/40 to-[#2563EB]/20 group-hover:from-[#2563EB] group-hover:to-[#1E40AF] transition-all duration-500 opacity-80 group-hover:opacity-100"></div>
-                                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                                                <div className="relative flex items-center gap-2 z-10">
-                                                    <Wand2 size={14} className="text-white animate-pulse" /> 
-                                                    <span className="font-bold text-white text-xs tracking-wide drop-shadow-md">Open Creative Studio</span>
-                                                </div>
-                                            </button>
                                         </div>
 
                                         <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
@@ -1185,19 +1160,6 @@ useEffect(() => {
                 )}
             </div>
 
-            {/* Asset Generator Modal */}
-            <AssetGeneratorModal 
-                isOpen={isGeneratorOpen}
-                onClose={() => setIsGeneratorOpen(false)}
-                onSave={handleSaveAssets}
-                context={{
-                    influencerName: activeInfluencer?.name || 'Partner',
-                    influencerCategory: activeInfluencer?.category || 'Creator',
-                    productFocus: initialContext?.productFocus || 'Product',
-                    campaignObjective: initialContext?.objective || 'Brand Awareness & Sales',
-                    scriptHook: activeData?.script?.content.hook
-                }}
-            />
         </div>
     );
 };

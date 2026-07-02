@@ -20,297 +20,300 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 import { CampaignContext } from '../App';
+import { TrendStageBoard } from './TrendStageBoard';
+import { activeBrand } from '../data/brandConfig';
 
-// --- Types ---
-
-interface Theme {
+// --- Theme interface ---
+// NOTE: sentiment/volume/engagement/verbatims are required — every item in
+// both `themes` and `marketTrends` must supply them, even if verbatims is
+// an empty array. `stage` is optional and only meaningful for marketTrends.
+export interface Theme {
   id: string;
   name: string;
-  sentiment: number;
-  engagement: string;
-  volume: string;
   type: 'Positive' | 'Critical' | 'Neutral';
+  sentiment: number; // -100 to 100
+  volume: string;
+  engagement: string;
+  growth?: string; // Market Trends only, e.g. "+68%"
   insight: string;
   verbatims: { text: string; source: string }[];
-  size: number; // px - based on volume
-  x: number; // %
-  y: number; // %
-  searchInterest?: number; // 0-100 (Trends only)
-  growth?: string; // e.g. "+25%" (Trends only)
+  x: number;
+  y: number;
+  size: number;
+  stage?: 'Emerging' | 'Growing' | 'Peaking' | 'Saturating'; // Market Trends only
 }
 
-// --- Mock Data ---
-
-const themes: Theme[] = [
-  // Hero / Large
+// --- Consumer Themes data (Pantene / Hair Care, South Korea & Japan) ---
+export const themes: Theme[] = [
   {
-    id: 'ai-perf',
-    name: 'AI Performance',
-    sentiment: 62,
-    engagement: '1.5M',
-    volume: '45.2K',
+    id: '1',
+    name: "Glass Hair (Mul-Gwang) Shine",
     type: 'Positive',
-    insight: "Users are praising the NPU speed for creative workflows, specifically Adobe Premiere rendering.",
+    sentiment: 88,
+    volume: '210.4K',
+    engagement: '58.2K',
+    insight: "Consumers are chasing ultra-glossy 'glass hair' as the K-beauty extension of glass skin, driving demand for high-shine serums and glazing treatments.",
     verbatims: [
-      { text: "The new NPU is a game changer! #Pro", source: "X" },
-      { text: "Copilot integration is seamless.", source: "Reddit" },
-      { text: "Finally, local AI that works.", source: "YouTube" }
+      { text: 'My hair finally has that mirror shine after switching my routine', source: 'Instagram' },
+      { text: 'Everyone on my FYP is doing the glass hair oil trick', source: 'TikTok' }
     ],
-    size: 130,
-    x: 50,
-    y: 40
-  },
-  {
-    id: 'battery',
-    name: 'Battery Life',
-    sentiment: -15,
-    engagement: '1.2M',
-    volume: '38.5K',
-    type: 'Critical',
-    insight: "Significant concerns about battery drain during high-performance tasks on the X1 Carbon Gen 11.",
-    verbatims: [
-      { text: "Battery barely lasts 4 hours on load.", source: "TechForum" },
-      { text: "Need better power management.", source: "Twitter" }
-    ],
-    size: 115,
-    x: 25,
-    y: 55
-  },
-  // Medium
-  {
-    id: 'keyboard',
-    name: 'Keyboard Feel',
-    sentiment: 92,
-    engagement: '900K',
-    volume: '50K',
-    type: 'Positive',
-    insight: "Consistent praise for the tactile feedback, maintaining the professional legacy.",
-    verbatims: [
-      { text: "Best keyboard in the industry, period.", source: "Reddit" }
-    ],
-    size: 95,
-    x: 78,
-    y: 35
-  },
-  {
-    id: 'oled',
-    name: 'OLED Display',
-    sentiment: 85,
-    engagement: '800K',
-    volume: '22.1K',
-    type: 'Positive',
-    insight: "The new OLED panel's color accuracy is a major selling point for designers.",
-    verbatims: [
-      { text: "These blacks are infinite.", source: "YouTube" }
-    ],
-    size: 90,
-    x: 65,
-    y: 15
-  },
-  {
-    id: 'thermals',
-    name: 'Thermal Mgmt',
-    sentiment: -25,
-    engagement: '750K',
-    volume: '12K',
-    type: 'Critical',
-    insight: "Users report throttling during heavy NPU workloads. Comparisons to MacBook Pro thermals are increasing.",
-    verbatims: [
-      { text: "My X1 gets too hot rendering video.", source: "Reddit" },
-      { text: "Fans are spinning constantly.", source: "Forum" }
-    ],
-    size: 95,
-    x: 65,
-    y: 60
-  },
-  // Small
-  {
-    id: 'ports',
-    name: 'Port Selection',
-    sentiment: 5,
-    engagement: '500K',
-    volume: '15K',
-    type: 'Neutral',
-    insight: "Mixed feelings about the removal of the SD card slot on some models.",
-    verbatims: [
-      { text: "Why no SD card slot?", source: "Forum" }
-    ],
-    size: 75,
-    x: 20,
-    y: 25
-  },
-  {
-    id: 'webcam',
-    name: 'Webcam Quality',
-    sentiment: 10,
-    engagement: '450K',
-    volume: '8K',
-    type: 'Neutral',
-    insight: "1080p is standard, but users want 4K options for executive calls.",
-    verbatims: [
-      { text: "Webcam is okay, not great.", source: "Twitter" }
-    ],
-    size: 70,
-    x: 40,
-    y: 10
-  },
-  {
-    id: 'trackpoint',
-    name: 'TrackPoint',
-    sentiment: 45,
-    engagement: '300K',
-    volume: '5K',
-    type: 'Neutral',
-    insight: "Loyalists love it, new users are confused. Niche appeal remains strong.",
-    verbatims: [
-      { text: "Never remove the red dot!", source: "Reddit" }
-    ],
-    size: 65,
-    x: 85,
-    y: 55
-  },
-  {
-    id: 'build',
-    name: 'Build Quality',
-    sentiment: 78,
-    engagement: '600K',
-    volume: '18K',
-    type: 'Positive',
-    insight: "Mil-spec testing marketing is resonating with enterprise buyers.",
-    verbatims: [
-      { text: "Feels like a tank.", source: "YouTube" }
-    ],
-    size: 80,
-    x: 35,
-    y: 70
-  },
-  {
-    id: 'price',
-    name: 'Price Point',
-    sentiment: -10,
-    engagement: '550K',
-    volume: '25K',
-    type: 'Critical',
-    insight: "High entry price is a barrier for freelance creatives compared to competitors.",
-    verbatims: [
-      { text: "Too expensive for the specs.", source: "Twitter" }
-    ],
-    size: 75,
     x: 15,
-    y: 68
+    y: 30,
+    size: 140
+  },
+  {
+    id: '2',
+    name: "Before/After 'Miracle' Transformations",
+    type: 'Positive',
+    sentiment: 91,
+    volume: '186.7K',
+    engagement: '72.5K',
+    insight: 'Transformation-format content continues to be the highest-converting creative style, with visible before/after damage-repair results driving trust and purchase intent.',
+    verbatims: [
+      { text: 'The difference after 4 weeks is honestly unreal', source: 'YouTube' },
+      { text: 'I never believed these videos until I tried it myself', source: 'Naver Blog' }
+    ],
+    x: 65,
+    y: 25,
+    size: 130
+  },
+  {
+    id: '3',
+    name: 'Scalp Health as Skincare',
+    type: 'Positive',
+    sentiment: 82,
+    volume: '158.3K',
+    engagement: '45.1K',
+    insight: 'Consumers increasingly treat scalp care as an extension of skincare, seeking serums, exfoliants, and barrier-repair language borrowed directly from facial skincare routines.',
+    verbatims: [
+      { text: 'I treat my scalp routine just like my face routine now', source: 'Instagram' },
+      { text: 'Scalp serums are the new essence step for me', source: 'Naver Blog' }
+    ],
+    x: 35,
+    y: 68,
+    size: 125
+  },
+  {
+    id: '4',
+    name: 'Hair Fall & Breakage Anxiety',
+    type: 'Critical',
+    sentiment: -58,
+    volume: '132.9K',
+    engagement: '39.4K',
+    insight: 'Rising anxiety around seasonal hair fall and breakage, amplified by humidity and heat styling, is driving urgent searches for strengthening and bond-repair solutions.',
+    verbatims: [
+      { text: 'My hair fall got so much worse this summer, I am panicking', source: 'TikTok' },
+      { text: 'Anyone else losing way more hair than usual lately', source: 'X (Twitter)' }
+    ],
+    x: 80,
+    y: 60,
+    size: 110
+  },
+  {
+    id: '5',
+    name: 'Salon-Grade At-Home Acid Treatments',
+    type: 'Positive',
+    sentiment: 79,
+    volume: '121.6K',
+    engagement: '33.8K',
+    insight: 'At-home bond and acid treatments positioned as "salon results without the salon price" are resonating strongly with budget-conscious Gen Z and millennial consumers.',
+    verbatims: [
+      { text: 'Saved so much money doing this treatment at home instead', source: 'YouTube' },
+      { text: 'Salon results for a fraction of the cost, sold', source: 'Instagram' }
+    ],
+    x: 45,
+    y: 15,
+    size: 118
+  },
+  {
+    id: '6',
+    name: 'Humidity & Frizz Frustration',
+    type: 'Critical',
+    sentiment: -47,
+    volume: '98.2K',
+    engagement: '27.6K',
+    insight: "Climate-driven frizz complaints spike seasonally across Korea and Japan's humid months, with consumers actively seeking humidity-proof styling and anti-frizz claims.",
+    verbatims: [
+      { text: 'The humidity destroys my hair the second I step outside', source: 'X (Twitter)' },
+      { text: 'Nothing survives this weather, my hair is a frizzy mess', source: 'TikTok' }
+    ],
+    x: 10,
+    y: 80,
+    size: 95
+  },
+  {
+    id: '7',
+    name: 'Sulfate-Free & Clean Formulas',
+    type: 'Positive',
+    sentiment: 74,
+    volume: '87.5K',
+    engagement: '24.3K',
+    insight: 'Ingredient-literate consumers are actively screening for sulfate-free, silicone-free, and "clean" formulation claims before purchase, especially among younger J-beauty audiences.',
+    verbatims: [
+      { text: 'I only buy sulfate-free now, my scalp thanks me', source: 'Instagram' },
+      { text: 'Checking the ingredient list has become a habit for me', source: 'Naver Blog' }
+    ],
+    x: 90,
+    y: 40,
+    size: 105
+  },
+  {
+    id: '8',
+    name: 'GRWM Hair Routine Content',
+    type: 'Positive',
+    sentiment: 85,
+    volume: '156.8K',
+    engagement: '94.0K',
+    insight: '"Get Ready With Me" hair-routine content is driving the highest engagement-to-volume ratio in the category, making it a priority creative format for influencer partnerships.',
+    verbatims: [
+      { text: 'Watching GRWM hair videos is basically a genre for me now', source: 'TikTok' },
+      { text: 'This routine video convinced me to switch products', source: 'YouTube' }
+    ],
+    x: 55,
+    y: 85,
+    size: 122
+  },
+  {
+    id: '9',
+    name: 'Packaging & Refill Sustainability',
+    type: 'Neutral',
+    sentiment: 38,
+    volume: '52.1K',
+    engagement: '14.2K',
+    insight: 'Conversation around refillable packaging and recyclability is steady but not yet a primary purchase driver — an area of interest without strong urgency behind it.',
+    verbatims: [
+      { text: 'Nice that its refillable but honestly I buy for results first', source: 'X (Twitter)' },
+      { text: 'Wish more brands did refill pouches like this one', source: 'Instagram' }
+    ],
+    x: 25,
+    y: 50,
+    size: 88
+  },
+  {
+    id: '10',
+    name: 'Salon Professional Endorsements',
+    type: 'Positive',
+    sentiment: 80,
+    volume: '76.4K',
+    engagement: '21.9K',
+    insight: 'Content featuring licensed stylists explaining product science is building disproportionate trust relative to volume, particularly among consumers wary of pure influencer marketing.',
+    verbatims: [
+      { text: 'I trust my hairdresser recommendation more than any ad', source: 'Naver Blog' },
+      { text: 'When a real stylist explains why it works I actually listen', source: 'Instagram' }
+    ],
+    x: 75,
+    y: 15,
+    size: 100
   }
 ];
 
-const marketTrends: Theme[] = [
-    {
-        id: 'mt-aipc',
-        name: 'AI Laptops',
-        sentiment: 95,
-        engagement: '5M+',
-        volume: '2.1M',
-        type: 'Positive',
-        insight: "Explosive growth in searches for 'AI PC' and 'NPU laptops' driven by Copilot+ announcements.",
-        verbatims: [],
-        size: 140,
-        x: 60,
-        y: 45,
-        searchInterest: 95,
-        growth: '+300%'
-    },
-    {
-        id: 'mt-hybrid',
-        name: '#HybridWork',
-        sentiment: 40,
-        engagement: '3.8M',
-        volume: '1.2M',
-        type: 'Neutral',
-        insight: "Sustained interest in remote collaboration tools and noise cancellation hardware.",
-        verbatims: [],
-        size: 110,
-        x: 30,
-        y: 30,
-        searchInterest: 70,
-        growth: '+15%'
-    },
-    {
-        id: 'mt-sustain',
-        name: 'Green Tech',
-        sentiment: 85,
-        engagement: '2.2M',
-        volume: '850K',
-        type: 'Positive',
-        insight: "Rising demand for PCR materials and repairability scores in enterprise procurement.",
-        verbatims: [],
-        size: 100,
-        x: 75,
-        y: 20,
-        searchInterest: 82,
-        growth: '+45%'
-    },
-    {
-        id: 'mt-security',
-        name: '#ZeroTrust',
-        sentiment: -20,
-        engagement: '1.8M',
-        volume: '900K',
-        type: 'Critical',
-        insight: "Increasing anxiety around firmware attacks and supply chain security globally.",
-        verbatims: [],
-        size: 95,
-        x: 40,
-        y: 65,
-        searchInterest: 88,
-        growth: '+80%'
-    },
-    {
-        id: 'mt-gaming',
-        name: 'Gaming Series',
-        sentiment: 70,
-        engagement: '1.5M',
-        volume: '600K',
-        type: 'Positive',
-        insight: "Crossover devices (high performance, subdued aesthetic) are trending up.",
-        verbatims: [],
-        size: 85,
-        x: 80,
-        y: 60,
-        searchInterest: 65,
-        growth: '+35%'
-    },
-    {
-        id: 'mt-foldable',
-        name: 'Foldable Devices',
-        sentiment: 60,
-        engagement: '1.2M',
-        volume: '400K',
-        type: 'Neutral',
-        insight: "Niche but high-value segment growing at 40% YoY.",
-        verbatims: [],
-        size: 80,
-        x: 20,
-        y: 50,
-        searchInterest: 55,
-        growth: '+40%'
-    },
-    {
-        id: 'mt-risc',
-        name: '#RISC-V',
-        sentiment: 50,
-        engagement: '800K',
-        volume: '300K',
-        type: 'Neutral',
-        insight: "Developer interest in alternative architectures is spiking.",
-        verbatims: [],
-        size: 70,
-        x: 55,
-        y: 15,
-        searchInterest: 48,
-        growth: '+60%'
-    }
-];
-
-const globalTrendData = [
-  { val: 40 }, { val: 45 }, { val: 42 }, { val: 50 }, { val: 48 }, { val: 55 }, { val: 60 }, { val: 62 }
+// --- Market Trends data (Skin Care, Beauty & Hair Care — South Korea & Japan) ---
+export const marketTrends: Theme[] = [
+  {
+    id: 'mt1',
+    name: 'Skinification of Hair Care',
+    type: 'Positive',
+    sentiment: 72,
+    volume: '125.0K',
+    engagement: '4.2M',
+    growth: '+68%',
+    insight: 'Hair care is adopting skincare ingredients and routines, with scalp health becoming a major focus across both Korean and Japanese beauty conversation.',
+    verbatims: [],
+    x: 20,
+    y: 20,
+    size: 130,
+    stage: 'Emerging'
+  },
+  {
+    id: 'mt2',
+    name: 'Derma-Cosmetics & Barrier Repair',
+    type: 'Positive',
+    sentiment: 66,
+    volume: '98.5K',
+    engagement: '3.4M',
+    growth: '+55%',
+    insight: 'Consumers are prioritizing skin (and scalp) barrier health with ceramide-rich and microbiome-friendly formulations.',
+    verbatims: [],
+    x: 45,
+    y: 30,
+    size: 140,
+    stage: 'Growing'
+  },
+  {
+    id: 'mt3',
+    name: 'Clean & Certified Vegan Beauty',
+    type: 'Positive',
+    sentiment: 61,
+    volume: '73.1K',
+    engagement: '2.6M',
+    growth: '+47%',
+    insight: 'Clean beauty is evolving with third-party certifications and vegan formulations as key differentiators, spilling into hair care claims.',
+    verbatims: [],
+    x: 70,
+    y: 25,
+    size: 125,
+    stage: 'Growing'
+  },
+  {
+    id: 'mt4',
+    name: 'Glass Skin (Glass-myeok) / Translucent Complexion',
+    type: 'Positive',
+    sentiment: 84,
+    volume: '189.3K',
+    engagement: '5.1M',
+    growth: '+42%',
+    insight: 'The dewy, ultra-hydrated skin look continues to dominate and is the aesthetic driving the parallel "glass hair" trend.',
+    verbatims: [],
+    x: 30,
+    y: 55,
+    size: 150,
+    stage: 'Peaking'
+  },
+  {
+    id: 'mt5',
+    name: 'Year-Round Advanced Sunscreen Culture',
+    type: 'Positive',
+    sentiment: 70,
+    volume: '112.4K',
+    engagement: '3.9M',
+    growth: '+38%',
+    insight: 'Daily SPF use has become non-negotiable, with chemical vs. physical filters gaining regulatory and consumer attention.',
+    verbatims: [],
+    x: 65,
+    y: 65,
+    size: 135,
+    stage: 'Peaking'
+  },
+  {
+    id: 'mt6',
+    name: 'Inner Beauty & Nutricosmetics',
+    type: 'Neutral',
+    sentiment: 42,
+    volume: '46.8K',
+    engagement: '1.5M',
+    growth: '+31%',
+    insight: 'Beauty-from-within is growing steadily with ingestible collagen, vitamins, and supplements marketed for skin and hair health.',
+    verbatims: [],
+    x: 50,
+    y: 80,
+    size: 110,
+    stage: 'Saturating'
+  },
+  {
+    id: 'mt7',
+    name: "J-Beauty Minimalism & 'Skip-Care'",
+    type: 'Neutral',
+    sentiment: 35,
+    volume: '54.2K',
+    engagement: '1.9M',
+    growth: '+24%',
+    insight: 'A less-is-more approach is gaining traction in Japan, focusing on multi-functional products and simplified routines.',
+    verbatims: [],
+    x: 80,
+    y: 45,
+    size: 100,
+    stage: 'Saturating'
+  }
 ];
 
 // --- Components ---
@@ -326,8 +329,20 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
     window.scrollTo(0, 0);
   }, []);
 
-  const [visualMode, setVisualMode] = useState<'bubbles' | 'list'>('bubbles');
+  React.useEffect(() => {
+    if (viewMode === 'market-trends') {
+      setVisualMode('list');
+    } else {
+      setVisualMode('bubbles');
+    }
+  }, [viewMode]);
+
+  const [visualMode, setVisualMode] = useState<'bubbles' | 'list'>(viewMode === 'market-trends' ? 'list' : 'bubbles');
   const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
+  const [showDebugBorders, setShowDebugBorders] = useState(false);
+
+  // Controls bubble size (0.65 = 65% of original size)
+  const BUBBLE_SIZE_SCALE = 0.9;
 
   const currentThemes = viewMode === 'market-trends' ? marketTrends : themes;
   const selectedTheme = currentThemes.find(t => t.id === selectedThemeId);
@@ -343,15 +358,25 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
     });
   };
 
+  // Top 4 Market Trends by volume, used to drive the "Market Trend Pulse" panel
+  const topMarketTrends = [...marketTrends]
+    .sort((a, b) => parseFloat(b.volume) - parseFloat(a.volume))
+    .slice(0, 4);
+
+  // Top 4 Consumer Themes by volume, used to drive the "Market Intelligence" panel
+  const topConsumerThemes = [...themes]
+    .sort((a, b) => parseFloat(a.volume) < parseFloat(b.volume) ? 1 : -1)
+    .slice(0, 4);
+
   return (
     <div className="flex flex-col h-[calc(100vh-150px)] gap-4 relative pb-2 mb-4">
       
       <div className="flex-1 flex gap-4 overflow-hidden">
-        {/* PART 2: THE "DENSE" THEME GALAXY */}
-        <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col border border-gray-100">
+        {/* THEME GALAXY / MARKET TRENDS */}
+        <div className="flex-1 bg-white rounded-2xl shadow-[0px_4px_12px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col">
            
            {/* Compact Header / Controls */}
-           <div className="px-6 py-3 border-b border-gray-100 flex justify-between items-center z-10 bg-white/90 backdrop-blur-sm h-[60px]">
+           <div className="px-6 py-3 flex justify-between items-center z-10 bg-white/90 backdrop-blur-sm h-[60px]">
              <div className="flex items-center gap-2">
                <h2 className="text-lg font-bold text-[#111111] tracking-tight">
                  {viewMode === 'market-trends' ? 'Market Trends' : 'Theme Galaxy'}
@@ -361,128 +386,150 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                  {viewMode === 'market-trends' ? '' : 'Real-time sentiment clustering'}
                </span>
              </div>
-             <div className="bg-gray-100 p-1 rounded-lg flex">
-               <button 
-                 onClick={() => setVisualMode('bubbles')}
-                 className={clsx("p-1.5 rounded-md transition-all", visualMode === 'bubbles' ? "bg-white text-[#2563EB] shadow-sm" : "text-gray-400")}
-               >
-                 <LayoutGrid size={16} />
-               </button>
-               <button 
-                 onClick={() => setVisualMode('list')}
-                 className={clsx("p-1.5 rounded-md transition-all", visualMode === 'list' ? "bg-white text-[#2563EB] shadow-sm" : "text-gray-400")}
-               >
-                 <List size={16} />
-               </button>
+             <div className="flex items-center gap-2">
+               <div className="bg-gray-100 p-1 rounded-lg flex">
+                 <button 
+                   onClick={() => setVisualMode('bubbles')}
+                   className={clsx("p-1.5 rounded-md transition-all", visualMode === 'bubbles' ? "bg-white text-[#2563EB] shadow-sm" : "text-gray-400")}
+                 >
+                   <LayoutGrid size={16} />
+                 </button>
+                 <button 
+                   onClick={() => setVisualMode('list')}
+                   className={clsx("p-1.5 rounded-md transition-all", visualMode === 'list' ? "bg-white text-[#2563EB] shadow-sm" : "text-gray-400")}
+                 >
+                   <List size={16} />
+                 </button>
+               </div>
              </div>
            </div>
 
            {/* Content Area */}
            <div className="flex-1 relative overflow-hidden bg-gradient-to-br from-gray-50/50 to-white">
-              {visualMode === 'bubbles' ? (
+              {visualMode === 'bubbles' && viewMode === 'consumer-themes' ? (
                 <div 
                     className="absolute inset-0" 
                     onClick={(e) => {
-                        // Deselect if clicking background
                         if (e.target === e.currentTarget) setSelectedThemeId(null);
                     }}
                 >
                   {/* Background Grid */}
-                  <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:30px_20px] opacity-40 pointer-events-none"></div>
                   
-                  {/* Bubbles */}
-                  {currentThemes.map((theme) => {
-                    const isSelected = selectedThemeId === theme.id;
-                    // Force neutral appearance for market trends as per user request (no sentiment data)
-                    const isNeutral = theme.type === 'Neutral' || viewMode === 'market-trends';
-                    
-                    // Gradient Logic
-                    let gradient = 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)'; // Default Neutral
-                    let glowColor = 'rgba(156, 163, 175, 0.5)'; // Gray glow
+                  {/* Bubbles Container with padding */}
+                  <div 
+                    className="absolute inset-0 p-20 overflow-hidden"
+                    style={{
+                      border: showDebugBorders ? '3px solid blue' : 'none',
+                      transform: 'scale(0.85)',
+                      background: showDebugBorders ? 'rgba(0, 0, 255, 0.05)' : 'transparent'
+                    }}
+                  >
+                    {currentThemes.map((theme) => {
+                      const isSelected = selectedThemeId === theme.id;
+                      const isNeutral = theme.type === 'Neutral';
+                      
+                      let gradient = 'radial-gradient(circle at 30% 30%, #ffffff, #e5e7eb)';
+                      let glowColor = 'rgba(156, 163, 175, 0.5)';
 
-                    // Custom tinted neutral for Market Trends
-                    if (viewMode === 'market-trends') {
-                         gradient = 'radial-gradient(circle at 30% 30%, #FFFFFF, #EFF6FF)'; // White to very subtle blue tint
-                         glowColor = 'rgba(37, 99, 235, 0.15)'; // Subtle blue glow
-                    }
+                      if (!isNeutral) {
+                          if (theme.type === 'Positive') {
+                              gradient = 'radial-gradient(circle at 30% 30%, #34D399, #059669)';
+                              glowColor = 'rgba(16, 185, 129, 0.6)';
+                          }
+                          if (theme.type === 'Critical') {
+                              gradient = 'radial-gradient(circle at 30% 30%, #F87171, #991B1B)';
+                              glowColor = 'rgba(239, 68, 68, 0.6)';
+                          }
+                      }
+                      
+                      const textColor = isNeutral ? '#333333' : '#FFFFFF';
+                      const textShadow = isNeutral ? 'none' : '0 1px 2px rgba(0,0,0,0.2)';
 
-                    if (!isNeutral) {
-                        if (theme.type === 'Positive') {
-                            gradient = 'radial-gradient(circle at 30% 30%, #34D399, #059669)'; // Emerald to Teal
-                            glowColor = 'rgba(16, 185, 129, 0.6)';
-                        }
-                        if (theme.type === 'Critical') {
-                            gradient = 'radial-gradient(circle at 30% 30%, #F87171, #991B1B)'; // Red to Maroon
-                            glowColor = 'rgba(239, 68, 68, 0.6)';
-                        }
-                    }
-                    
-                    // Text Color Logic
-                    const textColor = isNeutral ? '#333333' : '#FFFFFF';
-                    const textShadow = isNeutral ? 'none' : '0 1px 2px rgba(0,0,0,0.2)';
+                      const clampedX = Math.max(5, Math.min(95, theme.x));
+                      const clampedY = Math.max(5, Math.min(95, theme.y));
+                      const isClamped = theme.x !== clampedX || theme.y !== clampedY;
 
-                    return (
-                      <motion.div
-                        key={theme.id}
-                        layoutId={`bubble-${theme.id}`}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedThemeId(theme.id);
-                        }}
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ 
-                          scale: isSelected ? 1.1 : 1,
-                          opacity: 1,
-                          // Gentle floating animation
-                          y: isSelected ? 0 : [0, -4, 4, 0],
-                        }}
-                        whileHover={{ 
-                          scale: isSelected ? 1.15 : 1.1,
-                          zIndex: 50,
-                          boxShadow: isSelected 
-                            ? `0 0 0 4px white, 0 0 30px ${glowColor}, inset 0 2px 4px rgba(255,255,255,0.4)`
-                            : `inset 0 2px 4px rgba(255,255,255,0.5), 0 12px 24px rgba(0,0,0,0.15), 0 0 20px ${glowColor}` 
-                        }}
-                        transition={{  
-                          scale: { duration: 0.3, type: "spring", stiffness: 300, damping: 20 },
-                          boxShadow: { duration: 0.2 },
-                          y: { duration: 4 + Math.random() * 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: Math.random() * 2 }
-                        }}
-                        style={{
-                          position: 'absolute',
-                          left: `${theme.x}%`,
-                          top: `${theme.y}%`,
-                          width: theme.size,
-                          height: theme.size,
-                          background: gradient,
-                          backdropFilter: 'blur(8px)',
-                          boxShadow: isSelected 
-                            ? `0 0 0 3px white, 0 0 20px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.4)`
-                            : `inset 0 2px 4px rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.08)`,
-                          borderRadius: '50%',
-                          cursor: 'pointer',
-                          zIndex: isSelected ? 30 : 10,
-                          transform: 'translate(-50%, -50%)',
-                          border: isNeutral ? '1px solid #E5E7EB' : 'none'
-                        }}
-                        className={clsx(
-                            "flex items-center justify-center text-center p-2 group cursor-pointer",
-                            !isSelected && isNeutral && "hover:border-[#999999]"
-                        )}
-                      >
-                         <div className="relative">
-                            <span 
-                                style={{ color: textColor, textShadow }}
-                                className="font-bold text-[11px] leading-tight pointer-events-none select-none font-inter tracking-tight block"
-                            >
-                            {theme.name}
-                            </span>
-                            {/* Volume Indicator on Bubble (Optional, or just keep clean) */}
-                         </div>
-                      </motion.div>
-                    );
-                  })}
+                      return (
+                        <motion.div
+                          key={theme.id}
+                          layoutId={`bubble-${theme.id}`}
+                          onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedThemeId(theme.id);
+                          }}
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ 
+                            scale: isSelected ? 1.1 : 1,
+                            opacity: 1,
+                            y: isSelected ? 0 : [0, -4, 4, 0],
+                          }}
+                          whileHover={{ 
+                            scale: isSelected ? 1.15 : 1.1,
+                            zIndex: 50,
+                            boxShadow: isSelected 
+                              ? `0 0 0 4px white, 0 0 30px ${glowColor}, inset 0 2px 4px rgba(255,255,255,0.4)`
+                              : `inset 0 2px 4px rgba(255,255,255,0.5), 0 12px 24px rgba(0,0,0,0.15), 0 0 20px ${glowColor}` 
+                          }}
+                          transition={{  
+                            scale: { duration: 0.3, type: "spring", stiffness: 300, damping: 20 },
+                            boxShadow: { duration: 0.2 },
+                            y: { duration: 4 + Math.random() * 2, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: Math.random() * 2 }
+                          }}
+                          style={{
+                            position: 'absolute',
+                            left: `min(max(calc(${clampedX}% - ${theme.size * BUBBLE_SIZE_SCALE / 2}px), 0px), calc(100% - ${theme.size * BUBBLE_SIZE_SCALE}px))`,
+                            top: `min(max(calc(${clampedY}% - ${theme.size * BUBBLE_SIZE_SCALE / 2}px), 0px), calc(100% - ${theme.size * BUBBLE_SIZE_SCALE}px))`,
+                            width: `${theme.size * BUBBLE_SIZE_SCALE}px`,
+                            height: `${theme.size * BUBBLE_SIZE_SCALE}px`,
+                            background: gradient,
+                            backdropFilter: 'blur(8px)',
+                            boxShadow: isSelected 
+                              ? `0 0 0 3px white, 0 0 20px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,0.4)`
+                              : `inset 0 2px 4px rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.08)`,
+                            borderRadius: '50%',
+                            cursor: 'pointer',
+                            zIndex: isSelected ? 30 : 10,
+                            border: isNeutral ? '1px solid #E5E7EB' : 'none'
+                          }}
+                          className={clsx(
+                              "flex items-center justify-center text-center p-2 group cursor-pointer",
+                              !isSelected && isNeutral && "hover:border-[#999999]"
+                          )}
+                        >
+                           <div className="relative">
+                              <span 
+                                  style={{ color: textColor, textShadow }}
+                                  className="font-bold text-[11px] leading-tight pointer-events-none select-none font-inter tracking-tight block"
+                              >
+                                {theme.name}
+                              </span>
+                              {showDebugBorders && isClamped && (
+                                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white text-[8px] px-1 rounded whitespace-nowrap">
+                                  clamped
+                                </div>
+                              )}
+                              {theme.stage && (
+                                <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                                  <span className={clsx(
+                                    "text-[8px] font-bold px-1.5 py-0.5 rounded-full",
+                                    theme.stage === 'Emerging' && "bg-green-100 text-green-700",
+                                    theme.stage === 'Growing' && "bg-blue-100 text-blue-700",
+                                    theme.stage === 'Peaking' && "bg-yellow-100 text-yellow-700",
+                                    theme.stage === 'Saturating' && "bg-gray-100 text-gray-600"
+                                  )}>
+                                    {theme.stage}
+                                  </span>
+                                </div>
+                              )}
+                           </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
                 </div>
+              ) : viewMode === 'market-trends' && visualMode === 'bubbles' ? (
+                <TrendStageBoard trends={marketTrends} onSelectTrend={setSelectedThemeId} />
               ) : (
                 <div className="p-0 overflow-y-auto h-full relative">
                   <table className="w-full text-left border-collapse">
@@ -492,6 +539,9 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                         <th className="py-2 px-4 font-bold text-gray-500 text-[10px] uppercase tracking-wider">{viewMode === 'market-trends' ? 'Mentions' : 'Volume'}</th>
                         <th className="py-2 px-4 font-bold text-gray-500 text-[10px] uppercase tracking-wider">{viewMode === 'market-trends' ? 'Engagements' : 'Sentiment'}</th>
                         <th className="py-2 px-4 font-bold text-gray-500 text-[10px] uppercase tracking-wider">{viewMode === 'market-trends' ? 'Growth' : 'Engagement'}</th>
+                        {viewMode === 'market-trends' && (
+                          <th className="py-2 px-4 font-bold text-gray-500 text-[10px] uppercase tracking-wider">Stage</th>
+                        )}
                       </tr>
                     </thead>
                     <tbody>
@@ -514,6 +564,19 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                           <td className="py-3 px-4 text-gray-600">
                             {viewMode === 'market-trends' ? <span className="text-green-600 font-bold">{t.growth}</span> : t.engagement}
                           </td>
+                          {viewMode === 'market-trends' && t.stage && (
+                            <td className="py-3 px-4">
+                              <span className={clsx(
+                                "text-[10px] font-bold px-2 py-1 rounded-full",
+                                t.stage === 'Emerging' && "bg-green-100 text-green-700",
+                                t.stage === 'Growing' && "bg-blue-100 text-blue-700",
+                                t.stage === 'Peaking' && "bg-yellow-100 text-yellow-700",
+                                t.stage === 'Saturating' && "bg-gray-100 text-gray-600"
+                              )}>
+                                {t.stage}
+                              </span>
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>
@@ -523,11 +586,10 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
            </div>
         </div>
 
-        {/* PART 3: THE "SMART" INSPECTOR PANEL (High Density) */}
+        {/* INSPECTOR PANEL */}
         <div className="w-[380px] flex-shrink-0 relative bg-white/90 backdrop-blur-xl border border-gray-100 shadow-[0_4px_24px_rgba(0,0,0,0.06)] rounded-2xl flex flex-col overflow-hidden transition-all duration-300">
             <AnimatePresence mode="wait">
                 {!selectedTheme ? (
-                    // STATE A: DEFAULT (Global Brand Pulse)
                     <motion.div
                         key="global-pulse"
                         initial={{ opacity: 0 }}
@@ -536,8 +598,7 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                         transition={{ duration: 0.2 }}
                         className="flex flex-col h-full bg-gradient-to-br from-white to-gray-50"
                     >
-                         {/* Header */}
-                        <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center h-[48px]">
+                         <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center h-[48px]">
                             <h3 className="text-base font-bold text-[#111111] flex items-center gap-2">
                                 <Activity size={18} className="text-[#2563EB]" />
                                 {viewMode === 'market-trends' ? 'Market Trend Pulse' : 'Market Intelligence'}
@@ -547,103 +608,34 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                         <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
                             <div className="flex flex-col gap-2 h-full justify-between">
                                 {viewMode === 'market-trends' ? (
-                                    <>
-                                        {/* Highlight 1 - Trends */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">AI Everywhere</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                AI-related search terms have surged <span className="font-bold">300% YoY</span>, indicating a massive shift in consumer interest.
-                                            </p>
+                                    topMarketTrends.map((trend) => (
+                                      <div key={trend.id} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
+                                        <div className="mb-0.5">
+                                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{trend.name}</span>
                                         </div>
-
-                                        {/* Highlight 2 - Trends */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Hybrid Hardware</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                Interest in 'Hybrid Work Laptops' remains steady, showing it's a <span className="font-bold">new baseline expectation</span>.
-                                            </p>
-                                        </div>
-
-                                        {/* Highlight 3 - Trends */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Sustainability</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                Green tech queries are up <span className="font-bold">45%</span>, with 'PCR Plastic' becoming a key differentiator.
-                                            </p>
-                                        </div>
-
-                                        {/* Highlight 4 - Trends */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Security Anxiety</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                Searches for 'Firmware Security' are spiking, reflecting growing <span className="font-bold">enterprise concerns</span>.
-                                            </p>
-                                        </div>
-                                    </>
+                                        <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
+                                          {trend.insight}
+                                        </p>
+                                      </div>
+                                    ))
                                 ) : (
-                                    <>
-                                        {/* Highlight 1 - Themes */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">AI Performance</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                AI Performance dominates conversation volume (<span className="font-bold">1.5M mentions</span>) with overwhelmingly positive sentiment.
-                                            </p>
+                                    topConsumerThemes.map((theme) => (
+                                      <div key={theme.id} className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
+                                        <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
+                                        <div className="mb-0.5">
+                                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{theme.name}</span>
                                         </div>
-
-                                        {/* Highlight 2 - Themes */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Battery Life</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                Battery life concerns account for <span className="font-bold">25% of critical feedback</span>, specifically regarding high-load tasks.
-                                            </p>
-                                        </div>
-
-                                        {/* Highlight 3 - Themes */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Keyboard</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                Keyboard satisfaction remains a brand stronghold, acting as a <span className="font-bold">primary retention driver</span>.
-                                            </p>
-                                        </div>
-
-                                        {/* Highlight 4 - Themes */}
-                                        <div className="bg-white p-3 rounded-lg border border-gray-100 shadow-sm relative overflow-hidden group hover:border-gray-200 transition-colors flex flex-col justify-center h-full">
-                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#2563EB]"></div>
-                                            <div className="mb-0.5">
-                                                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">OLED Display</span>
-                                            </div>
-                                            <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
-                                                OLED Display adoption is driving a <span className="font-bold">15% increase</span> in engagement among creative professionals.
-                                            </p>
-                                        </div>
-                                    </>
+                                        <p className="text-[11px] font-medium text-[#111111] leading-[1.3]">
+                                          {theme.insight}
+                                        </p>
+                                      </div>
+                                    ))
                                 )}
                             </div>
                         </div>
                     </motion.div>
                 ) : (
-                    // STATE B: SELECTED (Theme Deep Dive)
                     <motion.div
                         key="theme-detail"
                         initial={{ opacity: 0, x: 20 }}
@@ -652,13 +644,23 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                         transition={{ duration: 0.2 }}
                         className="flex flex-col h-full bg-gradient-to-b from-white to-gray-50"
                     >
-                        {/* Compact Header */}
                         <div className="px-4 pt-4 pb-3 flex justify-between items-start">
                              <div>
                                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-0.5">
                                     {viewMode === 'market-trends' ? 'Trend Selected' : 'Focus Selected'}
                                 </span>
                                 <h3 className="text-xl font-bold text-[#111111] leading-tight">{selectedTheme.name}</h3>
+                                {viewMode === 'market-trends' && selectedTheme.stage && (
+                                  <span className={clsx(
+                                    "text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mt-1",
+                                    selectedTheme.stage === 'Emerging' && "bg-green-100 text-green-700",
+                                    selectedTheme.stage === 'Growing' && "bg-blue-100 text-blue-700",
+                                    selectedTheme.stage === 'Peaking' && "bg-yellow-100 text-yellow-700",
+                                    selectedTheme.stage === 'Saturating' && "bg-gray-100 text-gray-600"
+                                  )}>
+                                    {selectedTheme.stage}
+                                  </span>
+                                )}
                              </div>
                              <button 
                                 onClick={() => setSelectedThemeId(null)}
@@ -668,7 +670,6 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                              </button>
                         </div>
 
-                        {/* Sentiment & Volume Summary */}
                         <div className="px-4 pb-4 border-b border-gray-100 grid grid-cols-3 gap-2">
                              {viewMode === 'market-trends' ? (
                                 <>
@@ -708,8 +709,6 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                         </div>
 
                         <div className="p-4 space-y-4 flex-1 overflow-y-auto relative">
-                            
-                            {/* AI Summary Card */}
                             <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
                                 <div className="flex items-center gap-1.5 mb-2 text-[#2563EB]">
                                     <Sparkles size={14} />
@@ -720,7 +719,20 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                                 </p>
                             </div>
 
-                            {/* Campaign Preview Logic - New! */}
+                            {selectedTheme.verbatims.length > 0 && (
+                              <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm space-y-2">
+                                <div className="flex items-center gap-1.5 mb-1 text-gray-500">
+                                    <MessageCircle size={14} />
+                                    <span className="text-[11px] font-bold uppercase tracking-wide">What people are saying</span>
+                                </div>
+                                {selectedTheme.verbatims.map((v, i) => (
+                                  <div key={i} className="text-[12px] text-gray-700 leading-snug border-l-2 border-gray-200 pl-2">
+                                    "{v.text}" <span className="text-gray-400">— {v.source}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
                             <div className="bg-gray-100 rounded-xl p-4 border border-gray-200">
                                 <div className="flex items-center gap-2 mb-3">
                                    <Target size={14} className="text-gray-600"/>
@@ -730,13 +742,12 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                                    If selected, the campaign will center on:
                                 </div>
                                 <div className="bg-white p-2 rounded border border-gray-200 text-xs font-semibold text-[#111111]">
-                                   "High-performance {selectedTheme.name.toLowerCase()}-driven productivity"
+                                   "{selectedTheme.name}-driven campaign strategy"
                                 </div>
                             </div>
                         </div>
 
-                        {/* CTA (Pinned Bottom) */}
-                        <div className="p-4 border-t border-gray-100 mt-auto bg-white/50 backdrop-blur-sm">
+                        <div className="p-4 border-t border-gray-100 mt-auto bg-white/50 backdrop-blur-sm relative">
                             <button 
                                 onClick={handleCreateCampaign}
                                 className="w-full h-12 bg-[#2563EB] hover:bg-[#1E40AF] text-white text-[14px] font-bold rounded-xl shadow-lg hover:shadow-blue-900/20 transition-all flex items-center justify-center gap-2 group"
@@ -747,6 +758,9 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                             </button>
                             <div className="text-center mt-2">
                                <span className="text-[10px] text-gray-400">Auto-links to Recommended Strategy</span>
+                            </div>
+                            <div className="absolute right-4 bottom-4 text-[10px] text-gray-400">
+                              Powered by {activeBrand.discoverPoweredBy}
                             </div>
                         </div>
                     </motion.div>

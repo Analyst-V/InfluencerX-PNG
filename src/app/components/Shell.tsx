@@ -2,9 +2,9 @@ import React from 'react';
 import { User, Bell, HelpCircle, ChevronDown, Search, LogOut } from 'lucide-react';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import c5iLogo from "figma:asset/c3d1c6063a6d243dda822ed70e57baf1a08d57f0.png";
+import { activeBrand } from '../data/brandConfig';
 
-type Module = 'Discover' | 'Recommend' | 'Create' | 'Monitor';
+type Module = 'Discover' | 'Recommend' | 'Plan' | 'Monitor';
 
 interface ShellProps {
   activeModule: Module;
@@ -107,15 +107,17 @@ export const Shell: React.FC<ShellProps> = ({
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-3">
              {/* White Logo and Text for Shell */}
-             <img src={c5iLogo} alt="C5i" className="h-8 w-auto object-contain brightness-0 invert" />
-             <span className="font-bold text-xl tracking-tight text-white">Incivus</span>
+             <img src={activeBrand.brandLogo} alt={activeBrand.brandName} className="h-8 w-auto object-contain brightness-0 invert" />
+             <span className="font-bold text-xl tracking-tight text-white">
+               {activeModule === 'Discover' ? 'Social Intelligence' : 'Campaign Intelligence'}
+             </span>
           </div>
         </div>
 
         {/* Center: Module Switcher */}
         <div className="absolute left-1/2 transform -translate-x-1/2">
           <div className="bg-white/10 backdrop-blur-md rounded-full p-1 flex border border-white/20">
-            {(['Discover', 'Recommend', 'Create', 'Monitor'] as Module[]).map((module) => (
+            {(['Discover', 'Recommend', 'Plan', 'Monitor'] as Module[]).map((module) => (
               <button
                 key={module}
                 onClick={() => setActiveModule(module)}
@@ -209,14 +211,14 @@ export const Shell: React.FC<ShellProps> = ({
             label="Product"
             value={product}
             onChange={setProduct || (() => {})}
-            options={['Professional', 'Convertible', 'Gaming', 'Business', 'Consumer']}
+            options={['Pro-V', 'Miracles', 'Micellar', 'Nutrient Blends']}
           />
 
           <FilterDropdown 
             label="Region" 
             value={region} 
             onChange={setRegion || (() => {})} 
-            options={['Global', 'North America', 'Western Europe', 'APAC']} 
+            options={['Both', 'South Korea', 'Japan']} 
           />
           
           <FilterDropdown 
@@ -251,6 +253,12 @@ export const Shell: React.FC<ShellProps> = ({
       <main className="p-6 max-w-[1600px] mx-auto space-y-6">
         {children}
       </main>
+
+      <div className="fixed bottom-6 right-6 z-50 max-w-[260px] text-right pointer-events-none">
+        <p className="text-[10px] text-gray-400 opacity-80">
+          Data shown is for illustration only. The numbers are not actual.
+        </p>
+      </div>
     </div>
   );
 };
