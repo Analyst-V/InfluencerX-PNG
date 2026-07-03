@@ -4,6 +4,11 @@
 // hardcodes a brand string, logo, or color literal should import from here
 // instead.
 
+import brandLogo from "../../assets/image.png";
+import brandLogoLight from "../../assets/pantene-logo-light.jpg";
+import parentLogo from "../../assets/P&G_logo.png";
+import vendorLogo from "../../assets/C5i_logo_for_dark_BG.png";
+
 export interface BrandConfig {
   brandName: string;
   brandShortName: string;
@@ -38,36 +43,41 @@ export interface BrandConfig {
 }
 
 export const pantene: BrandConfig = {
-  brandName: 'Pantene',
-  brandShortName: 'Pantene',
-  brandLogo: '/src/assets/image.png', // TODO: confirm this matches your actual light-mode/Shell asset
-  brandLogoLight: '/src/assets/pantene-logo-light.jpg',
-  brandTagline: 'Strong is Beautiful',
+  brandName: "Pantene",
+  brandShortName: "Pantene",
 
-  parentCompany: 'P&G',
-  parentLogo: '/src/assets/P&G_logo.png',
-  parentAttributionText: 'A P&G Brand',
+  // Logo displayed in the Shell header
+  brandLogo: brandLogo,
 
-  vendorName: 'C5i',
-  vendorLogo: '/src/assets/C5i_logo_for_dark_BG.png',
+  // Logo displayed on dark backgrounds (Landing page)
+  brandLogoLight: brandLogoLight,
 
-  primaryMarkets: ['South Korea', 'Japan'],
-  defaultMarket: 'South Korea',
+  brandTagline: "Strong is Beautiful",
 
-  primaryCategory: 'Hair Care',
-  relatedCategories: ['Skin Care', 'Beauty', 'Hair Care'],
+  parentCompany: "P&G",
+  parentLogo: parentLogo,
+  parentAttributionText: "A P&G Brand",
+
+  vendorName: "C5i",
+  vendorLogo: vendorLogo,
+
+  primaryMarkets: ["South Korea", "Japan"],
+  defaultMarket: "South Korea",
+
+  primaryCategory: "Hair Care",
+  relatedCategories: ["Skin Care", "Beauty", "Hair Care"],
 
   colors: {
-    primary: '#D4AF37',
-    accent: '#000000',
-    primaryForeground: '#FFFFFF',
+    primary: "#D4AF37",
+    accent: "#000000",
+    primaryForeground: "#FFFFFF",
   },
 
-  platformName: 'Social Intelligence & Campaign Optimization Platform',
-  platformShortName: 'Social Intelligence Platform',
+  platformName: "Social Intelligence & Campaign Optimization Platform",
+  platformShortName: "Social Intelligence Platform",
 
-  discoverPoweredBy: 'TrendTraX',
-  defaultPoweredBy: 'InfluencerX',
+  discoverPoweredBy: "TrendTraX",
+  defaultPoweredBy: "InfluencerX",
 };
 
 export const activeBrand: BrandConfig = pantene;
