@@ -21,8 +21,11 @@ interface ShellProps {
   setPeriod?: (val: string) => void;
   channel?: string;
   setChannel?: (val: string) => void;
-  product?: string;
+  category?: string;
   setProduct?: (val: string) => void;
+  // NEW: Brand filter
+  brand?: string;
+  setBrand?: (val: string) => void;
 }
 
 const FilterDropdown = ({ 
@@ -96,8 +99,10 @@ export const Shell: React.FC<ShellProps> = ({
     setPeriod,
     channel = 'All Channels',
     setChannel,
-    product = 'Professional',
-    setProduct
+    category = 'Daily Care',
+    setProduct,
+    brand = 'All Brands',
+    setBrand
 }) => {
   return (
     <div className="min-h-screen bg-[#F5F5F5] font-sans text-[#1C1C1C]">
@@ -207,11 +212,19 @@ export const Shell: React.FC<ShellProps> = ({
         <div className="h-4 w-[1px] bg-gray-300"></div>
 
         <div className="flex items-center gap-4 text-sm">
+          {/* NEW: Brand Filter - placed first in the filter list */}
           <FilterDropdown
-            label="Product"
-            value={product}
+            label="Brand"
+            value={brand}
+            onChange={setBrand || (() => {})}
+            options={['All Brands', 'Pantene', 'Dove (Unilever)', 'Essential', 'TSUBAKI', 'Dr. Groot', '&honey']}
+          />
+
+          <FilterDropdown
+            label="Category"
+            value={category}
             onChange={setProduct || (() => {})}
-            options={['Pro-V', 'Miracles', 'Micellar', 'Nutrient Blends']}
+            options={['Daily Care','Repair & Damage Control','Scalp Health','Volume & Texture','Specialized Treatments']}
           />
 
           <FilterDropdown 
@@ -254,11 +267,11 @@ export const Shell: React.FC<ShellProps> = ({
         {children}
       </main>
 
-      <div className="fixed bottom-6 right-6 z-50 max-w-[260px] text-right pointer-events-none">
-        <p className="text-[10px] text-gray-400 opacity-80">
-          Data shown is for illustration only. The numbers are not actual.
-        </p>
-      </div>
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+  <p className="px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200 text-xs font-medium text-gray-600 shadow-sm">
+    Data shown is for illustration only. The numbers are not actual.
+  </p>
+</div>
     </div>
   );
 };

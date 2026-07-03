@@ -10,7 +10,7 @@ export interface BrandConfig {
   brandLogo: string; // for light backgrounds (Shell header)
   brandLogoLight: string; // for dark backgrounds (Landing page hero)
   brandTagline: string;
-
+  landingPageCreatives?: string[];
   parentCompany: string;
   parentLogo: string;
   parentAttributionText: string;
@@ -40,7 +40,7 @@ export interface BrandConfig {
 export const pantene: BrandConfig = {
   brandName: 'Pantene',
   brandShortName: 'Pantene',
-  brandLogo: '/src/assets/pantene-logo.svg', // TODO: confirm this matches your actual light-mode/Shell asset
+  brandLogo: '/src/assets/image.png', // TODO: confirm this matches your actual light-mode/Shell asset
   brandLogoLight: '/src/assets/pantene-logo-light.jpg',
   brandTagline: 'Strong is Beautiful',
 

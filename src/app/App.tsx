@@ -31,7 +31,10 @@ export interface CampaignContext {
   sentiment?: 'Positive' | 'Negative' | 'Neutral' | string;
   insight?: string;
   sourceModule?: string;
+  // NEW: Live Streaming field
+  isLiveStreaming?: boolean;
 }
+
 const App = () => {
   const [activeModule, setActiveModule] = useState<'Discover' | 'Recommend' | 'Plan' | 'Monitor'>('Discover');
   const [showLanding, setShowLanding] = useState(true);
@@ -42,7 +45,9 @@ const App = () => {
   const [region, setRegion] = useState(activeBrand?.defaultMarket || 'Japan');
   const [period, setPeriod] = useState('Last 30 Days');
   const [channel, setChannel] = useState('All Channels');
-  const [product, setProduct] = useState('Pro-V');
+  const [category, setProduct] = useState('Daily Care');
+  // NEW: Brand filter state
+  const [brand, setBrand] = useState('All Brands');
 
   const handleNavigateToRecommend = (context: CampaignContext) => {
     setCampaignContext(context);
@@ -97,24 +102,27 @@ const App = () => {
             className="h-full w-full"
           >
             <Shell 
-          activeModule={activeModule} 
-          setActiveModule={setActiveModule}
-          onLogout={handleLogout}
-          discoverViewMode={discoverViewMode}
-          setDiscoverViewMode={setDiscoverViewMode}
-          
-          // Filter Props
-          region={region}
-          setRegion={setRegion}
-          period={period}
-          setPeriod={setPeriod}
-          channel={channel}
-          setChannel={setChannel}
-          product={product}
-          setProduct={setProduct}
-        >
-          {renderModule()}
-        </Shell>
+              activeModule={activeModule} 
+              setActiveModule={setActiveModule}
+              onLogout={handleLogout}
+              discoverViewMode={discoverViewMode}
+              setDiscoverViewMode={setDiscoverViewMode}
+              
+              // Filter Props
+              region={region}
+              setRegion={setRegion}
+              period={period}
+              setPeriod={setPeriod}
+              channel={channel}
+              setChannel={setChannel}
+              category={category}
+              setProduct={setProduct}
+              // NEW: Brand filter props
+              brand={brand}
+              setBrand={setBrand}
+            >
+              {renderModule()}
+            </Shell>
           </motion.div>
         )}
       </AnimatePresence>

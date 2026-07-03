@@ -110,7 +110,8 @@ const PlatformIcon = ({ platform, size = 20 }: { platform: string, size?: number
     case 'YouTube': return <Youtube size={size} className="text-[#FF0000]" />;
     case 'TikTok': return <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className="text-black"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>;
     case 'LinkedIn': return <Linkedin size={size} className="text-[#0077B5]" />;
-    case 'Twitter': return <Twitter size={size} className="text-[#1DA1F2]" />;
+    case 'Twitter': 
+    case 'X (Twitter)': return <Twitter size={size} className="text-[#1DA1F2]" />;
     case 'Facebook': return <Facebook size={size} className="text-[#1877F2]" />;
     default: return <Globe size={size} className="text-gray-400" />;
   }
@@ -193,12 +194,12 @@ const generateInfluencers = (category: CreatorCategory, geo: CampaignGeography, 
   }
   
   if (geo !== 'Global') {
-    if (geo === 'United States') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('US'));
-    } else if (geo === 'Europe') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('UK') || inf.audienceGeo.includes('Europe'));
-    } else if (geo === 'India') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('India'));
+    if (geo === 'Japan') {
+      filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan'));
+    } else if (geo === 'South Korea') {
+      filtered = filtered.filter(inf => inf.audienceGeo.includes('South Korea'));
+    } else if (geo === 'Both') {
+      filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan') || inf.audienceGeo.includes('South Korea'));
     }
   }
 
@@ -236,7 +237,7 @@ const InfluencerDetailModal = ({
   isSelected = false
 }: InfluencerDetailModalProps) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'metrics' | 'campaign'>('overview');
-  const [showScriptGenerator, setShowScriptGenerator] = useState(false);
+  const [showScriptGenerator, setShowScriptGenerator] = useState(true);
   const [script, setScript] = useState<string | null>(null);
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
 
@@ -720,8 +721,24 @@ Audio: "Link in bio to check it out. You need to experience this."`;
 
                 {/* Action Buttons */}
                 <div className="grid grid-cols-3 gap-3">
-                  <button className="px-4 py-3 bg-[#2563EB] text-white rounded-xl font-bold text-sm hover:bg-[#1E40AF] transition-colors flex items-center justify-center gap-2">
-                    <Plus size={18} /> Add to Campaign
+                  <button 
+                    onClick={() => {
+                      if (onToggleSelection && influencer) {
+                        onToggleSelection(influencer.id);
+                      }
+                    }}
+                    className={clsx(
+                      "px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors",
+                      isSelected
+                        ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        : "bg-[#2563EB] text-white hover:bg-[#1E40AF]"
+                    )}
+                  >
+                    {isSelected ? (
+                      <><X size={18} /> Remove from Campaign</>
+                    ) : (
+                      <><Plus size={18} /> Add to Campaign</>
+                    )}
                   </button>
                   <button className="px-4 py-3 border border-gray-200 text-gray-600 rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
                     <Bookmark size={18} /> Save for Later
@@ -794,11 +811,40 @@ export const RecommendModule = ({
   const [description, setDescription] = useState<string>('');
   const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('UGC');
   const [productFocus, setProductFocus] = useState<ProductModel>('All Models');
+  // NEW: Live Streaming Campaign toggle
+  const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(false);
 
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
   const [selectedInfluencerIds, setSelectedInfluencerIds] = useState<string[]>([]);
   const [selectedInfluencerForModal, setSelectedInfluencerForModal] = useState<Influencer | null>(null);
   const [showWarning, setShowWarning] = useState(false);
+
+  // Updated GEOGRAPHIES constant - removed Global, US, Europe, India, and added Japan, South Korea, Both
+  const UPDATED_GEOGRAPHIES = [
+    { value: 'Japan', label: 'Japan' },
+    { value: 'South Korea', label: 'South Korea' },
+    { value: 'Both', label: 'Both' }
+  ];
+
+  // Updated CREATOR_TIERS - removed bracketed text
+  const UPDATED_CREATOR_TIERS = [
+    { value: 'UGC', label: 'UGC' },
+    { value: 'Macro Creators', label: 'Macro Creators' },
+    { value: 'Enterprise', label: 'Enterprise' },
+    { value: 'B2B Tech', label: 'B2B Tech' },
+    { value: 'Micro Influencers', label: 'Micro Influencers' }
+  ];
+
+  // Updated PLATFORMS - renamed Twitter to X (Twitter)
+  const UPDATED_PLATFORMS = [
+    { value: 'all-platforms', label: 'All Platforms' },
+    { value: 'instagram', label: 'Instagram' },
+    { value: 'tiktok', label: 'TikTok' },
+    { value: 'youtube', label: 'YouTube' },
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'twitter', label: 'X (Twitter)' }
+  ];
 
   const promptPills = useMemo(() => {
     return generatePromptPills(productLine, objective);
@@ -851,14 +897,7 @@ export const RecommendModule = ({
     setShowWarning(false);
     setIsLoading(true);
     
-    let geoMap: Record<string, CampaignGeography> = {
-      'global': 'Global',
-      'us-eu-india': 'US / Europe / India',
-      'united-states': 'United States',
-      'europe': 'Europe',
-      'india': 'India'
-    };
-    const campaignGeo = geoMap[geography] || 'Global';
+    const campaignGeo = geography as CampaignGeography;
     
     const platformDisplayNames: Record<string, string> = {
       'instagram': 'Instagram',
@@ -866,7 +905,7 @@ export const RecommendModule = ({
       'youtube': 'YouTube',
       'facebook': 'Facebook',
       'linkedin': 'LinkedIn',
-      'twitter': 'Twitter'
+      'twitter': 'X (Twitter)'
     };
     const platformList = platforms.length > 0 
       ? platforms.map(p => platformDisplayNames[p] || p)
@@ -888,14 +927,6 @@ export const RecommendModule = ({
   const handleProceedToCreate = () => {
     const selectedObjects = influencers.filter(inf => selectedInfluencerIds.includes(inf.id));
     
-    const geographyMap: Record<string, any> = {
-      'global': 'Global',
-      'us-eu-india': 'US / Europe / India',
-      'united-states': 'United States',
-      'europe': 'Europe',
-      'india': 'India'
-    };
-    
     const objectiveMap: Record<string, any> = {
       'awareness': 'Awareness',
       'engagement': 'Engagement',
@@ -910,7 +941,7 @@ export const RecommendModule = ({
       brand: PRODUCT_DISPLAY_NAMES[productLine] || productLine,
       productFocus: derivedProductFocus,
       objective: objectiveMap[objective] || objective,
-      geography: geographyMap[geography] || geography,
+      geography: geography,
       description: description || suggestedDescription,
       creatorCategory: creatorCategory,
       selectedInfluencers: mappedInfluencers.map(inf => ({
@@ -935,7 +966,8 @@ export const RecommendModule = ({
       targetPlatforms: platforms,
       targetGeography: geography,
       campaignDescription: description || suggestedDescription,
-      creatorTier: creatorCategory
+      creatorTier: creatorCategory,
+      isLiveStreaming: isLiveStreaming // Add live streaming flag
     };
     
     console.log('Navigating to Create with context:', campaignContext);
@@ -997,7 +1029,7 @@ export const RecommendModule = ({
               </div>
               <h1 className="text-2xl font-bold text-[#1C1C1C] mb-1">Campaign Strategy Setup</h1>
               <p className="text-gray-500 text-sm">
-                Define your {activeBrand.brandName} product campaign parameters to discover the perfect tech influencers.
+                Define your {activeBrand.brandName} product campaign parameters to discover the perfect beauty and haircare influencers.
               </p>
             </div>
 
@@ -1055,7 +1087,7 @@ export const RecommendModule = ({
                           onChange={(e) => setGeography(e.target.value as CampaignGeography)}
                           className="w-full h-10 pl-3 pr-10 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] appearance-none"
                         >
-                          {GEOGRAPHIES.map((g) => (
+                          {UPDATED_GEOGRAPHIES.map((g) => (
                             <option key={g.value} value={g.value}>{g.label}</option>
                           ))}
                         </select>
@@ -1063,12 +1095,31 @@ export const RecommendModule = ({
                       </div>
                     </div>
 
+                    {/* NEW: Live Streaming Campaign toggle */}
+                    <div>
+                      <label className="text-sm font-bold text-[#1C1C1C] block mb-1">
+                        Live Streaming Campaign
+                      </label>
+                      <button
+                        onClick={() => setIsLiveStreaming(!isLiveStreaming)}
+                        className={clsx(
+                          "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2",
+                          isLiveStreaming
+                            ? "bg-[#2563EB] text-white shadow-sm"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        )}
+                      >
+                        {isLiveStreaming ? <Check size={16} /> : <X size={16} />}
+                        {isLiveStreaming ? "Yes" : "No"}
+                      </button>
+                    </div>
+
                     <div>
                       <label className="text-sm font-bold text-[#1C1C1C] block mb-1 flex items-center gap-2">
                         <MonitorPlay size={16} /> Platforms <span className="text-gray-400 font-normal text-xs">(optional)</span>
                       </label>
                       <div className="flex flex-wrap gap-2">
-                        {PLATFORMS.filter(p => p.value !== 'all-platforms').map((p) => (
+                        {UPDATED_PLATFORMS.filter(p => p.value !== 'all-platforms').map((p) => (
                           <button
                             key={p.value}
                             onClick={() => {
@@ -1109,7 +1160,7 @@ export const RecommendModule = ({
                           onChange={(e) => setCreatorCategory(e.target.value as CreatorCategory)}
                           className="w-full h-10 pl-3 pr-10 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] appearance-none"
                         >
-                          {CREATOR_TIERS.map((t) => (
+                          {UPDATED_CREATOR_TIERS.map((t) => (
                             <option key={t.value} value={t.value}>{t.label}</option>
                           ))}
                         </select>
@@ -1119,7 +1170,7 @@ export const RecommendModule = ({
 
                     <div>
                       <label className="text-sm font-bold text-[#1C1C1C] block mb-1">
-                        Product Focus
+                        Category
                       </label>
                       <div className="relative">
                         <select 
@@ -1127,9 +1178,11 @@ export const RecommendModule = ({
                           onChange={(e) => setProductFocus(e.target.value as ProductModel)}
                           className="w-full h-10 pl-3 pr-10 bg-white border border-gray-300 rounded-xl text-sm font-medium focus:outline-none focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] appearance-none"
                         >
-                          {PRODUCT_MODELS.map((m) => (
-                            <option key={m.value} value={m.value}>{m.label}</option>
-                          ))}
+                          <option value="Daily Care">Daily Care</option>
+                          <option value="Repair & Damage Control">Repair & Damage Control</option>
+                          <option value="Scalp Health">Scalp Health</option>
+                          <option value="Volume & Texture">Volume & Texture</option>
+                          <option value="Specialized Treatments">Specialized Treatments</option>
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                       </div>
@@ -1211,7 +1264,7 @@ export const RecommendModule = ({
                   {isLoading ? (
                     <>
                       <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Analyzing Tech Network...
+                      Analyzing Beauty Network...
                     </>
                   ) : (
                     <>
@@ -1239,7 +1292,7 @@ export const RecommendModule = ({
                   <ChevronDown className="rotate-90" size={14} /> Back
                 </button>
                 <div>
-                  <h2 className="text-2xl font-bold text-[#1C1C1C] leading-tight">Recommended Tech Partners</h2>
+                  <h2 className="text-2xl font-bold text-[#1C1C1C] leading-tight">Recommended Beauty/Haircare Influencers</h2>
                   <p className="text-sm text-gray-500 mt-1">
                     {isLoading ? 'Updating results...' : `${influencers.length} influencers match your criteria`}
                   </p>
@@ -1263,13 +1316,33 @@ export const RecommendModule = ({
               </div>
             </div>
 
-            {/* Influencer Table - Removed Selected Count Section */}
+            {/* Influencer Table */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex-1 flex flex-col">
               <div className="overflow-auto flex-1">
                 <table className="w-full">
                   <thead className="bg-gray-50/80 sticky top-0 z-10">
                     <tr className="border-b border-gray-200">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">Rank</th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">
+                        <button 
+                          onClick={() => {
+                            // Toggle select all
+                            const allIds = influencers.map(inf => inf.id);
+                            const allSelected = allIds.every(id => selectedInfluencerIds.includes(id));
+                            if (allSelected) {
+                              setSelectedInfluencerIds([]);
+                            } else {
+                              setSelectedInfluencerIds(allIds);
+                            }
+                          }}
+                          className="hover:text-[#2563EB] transition-colors"
+                        >
+                          {influencers.every(inf => selectedInfluencerIds.includes(inf.id)) ? (
+                            <CheckSquare size={18} className="text-[#2563EB]" />
+                          ) : (
+                            <Square size={18} className="text-gray-400" />
+                          )}
+                        </button>
+                      </th>
                       <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Influencer</th>
                       <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Followers</th>
                       <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -1300,23 +1373,26 @@ export const RecommendModule = ({
                           <tr 
                             key={inf.id}
                             className={clsx(
-                              "hover:bg-gray-50/50 transition-colors cursor-pointer",
+                              "hover:bg-gray-50/50 transition-colors",
                               isSelected ? "bg-blue-50/30" : ""
                             )}
-                            onClick={() => setSelectedInfluencerForModal(inf)}
                           >
                             <td className="px-4 py-3">
-                              <div className={`
-                                w-7 h-7 rounded-full flex items-center justify-center mx-auto font-bold text-xs
-                                ${index === 0 ? 'bg-amber-50 text-amber-500' : ''}
-                                ${index === 1 ? 'bg-gray-100 text-gray-500' : ''}
-                                ${index === 2 ? 'bg-orange-50 text-orange-400' : ''}
-                                ${index > 2 ? 'bg-gray-50 text-gray-400' : ''}
-                              `}>
-                                {index + 1}
-                              </div>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleSelection(inf.id);
+                                }}
+                                className="hover:text-[#2563EB] transition-colors"
+                              >
+                                {isSelected ? (
+                                  <CheckSquare size={18} className="text-[#2563EB]" />
+                                ) : (
+                                  <Square size={18} className="text-gray-400" />
+                                )}
+                              </button>
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
                               <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
                                   {inf.avatarUrl ? (
@@ -1363,7 +1439,7 @@ export const RecommendModule = ({
                             <td className="px-4 py-3 text-center">
                               {getRiskBadge(inf.riskLevel)}
                             </td>
-                            <td className="px-4 py-3">
+                            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
                               <div className="space-y-1.5">
                                 <div className="flex flex-wrap gap-1">
                                   {inf.actionInsights?.strengths.slice(0, 2).map((s, i) => (
@@ -1400,6 +1476,11 @@ export const RecommendModule = ({
                 <div className="flex items-center gap-2">
                   <span className="h-4 px-1.5 text-[9px] font-medium rounded-full border border-gray-300 bg-gray-50 text-gray-500">Existing</span>
                   <span>Previous campaign history</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-gray-400">
+                    {selectedInfluencerIds.length} of {influencers.length} selected
+                  </span>
                 </div>
               </div>
               
