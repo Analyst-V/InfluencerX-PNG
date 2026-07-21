@@ -46,10 +46,10 @@ const KPI_DATA = [
   },
   {
     id: 2,
-    label: 'Brand Sentiment',
+    label: 'Net Sentiment',
     subLabel: 'Brand Lift vs. Competitors',
-    value: '+12%',
-    growth: '+12%',
+    value: '60%',
+    growth: '60%',
     icon: TrendingUp,
     color: 'bg-red-50 text-[#2563EB]',
     iconColor: '#2563EB'
@@ -59,7 +59,7 @@ const KPI_DATA = [
     label: 'Content Engagement',
     subLabel: 'Total views across platforms',
     value: '4.5M',
-    growth: '+12%',
+    growth: '17%',
     icon: Activity,
     color: 'bg-purple-50 text-purple-600',
     iconColor: '#9333EA'
@@ -69,7 +69,7 @@ const KPI_DATA = [
     label: 'Audience Reach',
     subLabel: 'Unique Beauty Consumers Reached (Japan)',
     value: '850k',
-    growth: '+12%',
+    growth: '60%',
     icon: Sparkles,
     color: 'bg-orange-50 text-orange-600',
     iconColor: '#EA580C'

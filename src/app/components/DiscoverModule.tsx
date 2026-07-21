@@ -466,7 +466,7 @@ const [visualMode, setVisualMode] = useState<'bubbles' | 'list'>(
 
   const currentThemes = viewMode === 'market-trends' ? marketTrends : themes;
   const selectedTheme = currentThemes.find(t => t.id === selectedThemeId);
-
+  const [language, setLanguage] = useState('English');
   const handleCreateCampaign = () => {
     if (!selectedTheme) return;
     onNavigateToRecommend({

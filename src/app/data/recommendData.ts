@@ -324,7 +324,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '2K',
     avgShares: '5K',
     // reliability adjusted to 40-60 for Moderate risk
-    fitScores: { reach: 35, resonance: 99, relevance: 85, reliability: adjustReliabilityForModerateRisk(80), efficiency: 99 },
+    fitScores: { reach: 35, resonance: 99, relevance: 85, reliability: 45, efficiency: 99 },
     cqi: generateCQI(92, 14.2),
     audienceGeo: 'Japan',
     audienceDemographics: 'Gen-Z 13-24',
@@ -555,7 +555,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '3.2K',
     avgShares: '8K',
     // reliability adjusted to 40-60 for Moderate risk
-    fitScores: { reach: 60, resonance: 96, relevance: 88, reliability: adjustReliabilityForModerateRisk(85), efficiency: 98 },
+    fitScores: { reach: 60, resonance: 96, relevance: 88, reliability: 58, efficiency: 98 },
     cqi: generateCQI(94, 12.6),
     audienceGeo: 'Japan',
     audienceDemographics: 'Gen-Z 16-25, Trend Followers',

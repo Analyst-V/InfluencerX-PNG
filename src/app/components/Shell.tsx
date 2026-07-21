@@ -26,6 +26,8 @@ interface ShellProps {
   // NEW: Brand filter
   brand?: string;
   setBrand?: (val: string) => void;
+  language?: string;
+setLanguage?: (val: string) => void;
 }
 
 const FilterDropdown = ({ 
@@ -93,16 +95,18 @@ export const Shell: React.FC<ShellProps> = ({
     onLogout, 
     discoverViewMode, 
     setDiscoverViewMode,
-    region = 'Global',
-    setRegion,
-    period = 'Last 30 Days',
-    setPeriod,
-    channel = 'All Channels',
-    setChannel,
-    category = 'Daily Care',
-    setProduct,
-    brand = 'All Brands',
-    setBrand
+    region = 'Japan',
+setRegion,
+period = 'Last 30 Days',
+setPeriod,
+channel = 'All Channels',
+setChannel,
+category = 'Daily Care',
+setProduct,
+language = 'English',
+setLanguage,
+brand = 'All Brands',
+setBrand
 }) => {
   return (
     <div className="min-h-screen bg-[#F5F5F5] font-sans text-[#1C1C1C]">
@@ -228,11 +232,11 @@ export const Shell: React.FC<ShellProps> = ({
           />
 
           <FilterDropdown 
-            label="Region" 
-            value={region} 
-            onChange={setRegion || (() => {})} 
-            options={['Japan']} 
-          />
+  label="Region" 
+  value={region} 
+  onChange={setRegion || (() => {})} 
+  options={['Japan', 'South Korea', 'Philippines']} 
+/>
           
           <FilterDropdown 
             label="Period" 
@@ -247,6 +251,13 @@ export const Shell: React.FC<ShellProps> = ({
             onChange={setChannel || (() => {})} 
             options={['All Channels', 'X (Twitter)', 'YouTube', 'Instagram', 'Facebook', 'TikTok', 'Forums', 'Blogs']} 
           />
+          <FilterDropdown
+  label="Language"
+  value={language}
+  onChange={setLanguage || (() => {})}
+  options={['English', 'Japanese', 'Korean', 'Filipino']}
+/>
+          
         </div>
 
         <div className="ml-auto flex items-center gap-2">
