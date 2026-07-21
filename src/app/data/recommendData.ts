@@ -65,10 +65,7 @@ const generateCQI = (safetyScore: number, engagementRate: number): number => {
   return Math.round((safetyScore * 0.6) + (normalizedEngagement * 0.4));
 };
 
-// Ensure Moderate risk has reliability between 40-60
-const adjustReliabilityForModerateRisk = (reliability: number): number => {
-  return Math.max(40, Math.min(60, reliability));
-};
+
 
 export const INFLUENCERS: Influencer[] = [
   {
