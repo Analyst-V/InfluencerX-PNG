@@ -204,7 +204,7 @@ export const TrendStageBoard: React.FC<TrendStageBoardProps> = ({ trends, onSele
                         onClick={() => onSelectTrend?.(trend.id)}
                         className="text-[11px] font-semibold text-[#2563EB] hover:underline flex items-center gap-0.5"
                       >
-                        Deep Dive <ArrowRight size={11} />
+                       <ArrowRight size={11} />
                       </button>
                     </div>
                   </div>

@@ -217,12 +217,12 @@ setBrand
 
         <div className="flex items-center gap-4 text-sm">
           {/* NEW: Brand Filter - placed first in the filter list */}
-          <FilterDropdown
+          {/* <FilterDropdown
             label="Brand"
             value={brand}
             onChange={setBrand || (() => {})}
             options={['All Brands', 'Pantene', 'Dove (Unilever)', 'Essential', 'TSUBAKI', '&honey']}
-          />
+          /> */}
 
           <FilterDropdown
             label="Category"
