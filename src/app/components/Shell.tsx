@@ -97,7 +97,7 @@ export const Shell: React.FC<ShellProps> = ({
     setDiscoverViewMode,
     region = 'Japan',
 setRegion,
-period = 'Last 30 Days',
+period = 'Last 1 Year',
 setPeriod,
 channel = 'All Channels',
 setChannel,
@@ -240,9 +240,9 @@ setBrand
           
           <FilterDropdown 
             label="Period" 
-            value={period} 
+            value={'Last 1 Year'} 
             onChange={setPeriod || (() => {})} 
-            options={['Last 24 Hours', 'Last 7 Days', 'Last 30 Days']} 
+            options={['Last 24 Hours', 'Last 7 Days', 'Last 30 Days','Last 1 Year']} 
           />
 
           <FilterDropdown 
