@@ -1,7 +1,5 @@
 // Extracted from RecommendModule.tsx
 
-// --- Types matching the provided RecommendModule.tsx source ---
-
 export type PerformanceMetric = { week: string; value: number };
 
 export type InfluencerPerformance = {
@@ -52,16 +50,12 @@ export interface Influencer {
   executionCost?: number;
 }
 
-// --- 1. Product Lines Array ---
-
 export const PRODUCT_LINES = [
   { value: 'pro-v', label: 'Pantene Pro-V' },
   { value: 'miracles', label: 'Pantene Miracles' },
   { value: 'micellar', label: 'Pantene Micellar' },
   { value: 'nutrient-blends', label: 'Pantene Nutrient Blends' }
 ];
-
-// --- 2. Influencer Roster Array ---
 
 export const INFLUENCERS: Influencer[] = [
   {
@@ -77,7 +71,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 850000,
     totalEngagement: '45K',
     engagementRate: 5.2,
-    emv: '$15K',
+    emv: '¥15K',
     safetyScore: 98,
     riskLevel: 'Safe',
     strengths: ['J-Beauty Authority', 'Detailed Tutorials', 'High Trust'],
@@ -97,7 +91,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '3.3x', 
       totalEngagement: '1.2M', 
       totalImpressions: '8.5M', 
-      attributedRevenue: '$120K' 
+      attributedRevenue: '¥120K' 
     },
     isNew: false,
     brandAffinity: ['miracles', 'micellar'],
@@ -113,7 +107,7 @@ export const INFLUENCERS: Influencer[] = [
     id: 'jieun_lee',
     rank: 2,
     name: 'Ji-eun Lee',
-    handle: '@jieun_kbeauty',
+    handle: '@jieun_beauty_trends',
     platform: 'YouTube',
     category: 'Enterprise',
     type: 'Veteran',
@@ -122,27 +116,27 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 2100000,
     totalEngagement: '180K',
     engagementRate: 8.5,
-    emv: '$45K',
+    emv: '¥45K',
     safetyScore: 95,
     riskLevel: 'Safe',
-    strengths: ['Glass Skin/Hair Crossover', 'Massive Reach', 'Trend Setter'],
+    strengths: ['Glass Hair Crossover', 'Massive Reach', 'Trend Setter'],
     considerations: ['High Cost', 'Busy Schedule'],
     avgViews: '850K',
     avgLikes: '120K',
     avgComments: '8.5K',
     avgShares: '15K',
     fitScores: { reach: 98, resonance: 92, relevance: 95, reliability: 97, efficiency: 80 },
-    audienceGeo: 'South Korea',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Women 16-29, Trend Followers',
-    campaignRecommendation: 'Broad awareness campaigns focusing on the "Skinification" of hair.',
-    suggestedContent: 'Full body & hair K-beauty shower routine',
+    campaignRecommendation: 'Broad awareness campaigns focusing on the Skinification of hair.',
+    suggestedContent: 'Full body & hair J-beauty shower routine',
     performance: { 
       weeklyEngagement: [{ week: 'W1', value: 180000 }, { week: 'W2', value: 195000 }], 
       weeklyROI: [{ week: 'W1', value: 4.1 }, { week: 'W2', value: 4.5 }], 
       avgROI: '4.2x', 
       totalEngagement: '3.5M', 
       totalImpressions: '25M', 
-      attributedRevenue: '$400K' 
+      attributedRevenue: '¥400K' 
     },
     isNew: false,
     brandAffinity: ['nutrient-blends', 'pro-v'],
@@ -167,7 +161,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 320000,
     totalEngagement: '35K',
     engagementRate: 10.9,
-    emv: '$8K',
+    emv: '¥8K',
     safetyScore: 99,
     riskLevel: 'Safe',
     strengths: ['Professional Stylist', 'Ingredient Breakdown', 'High Educational Value'],
@@ -187,7 +181,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '5.1x', 
       totalEngagement: '800K', 
       totalImpressions: '4.2M', 
-      attributedRevenue: '$65K' 
+      attributedRevenue: '¥65K' 
     },
     isNew: true,
     brandAffinity: ['micellar'],
@@ -204,7 +198,7 @@ export const INFLUENCERS: Influencer[] = [
     rank: 4,
     name: 'Min-jun Park',
     handle: '@minjun_scalpcare',
-    platform: 'Naver Blog',
+    platform: 'Instagram',
     category: 'Micro Creators',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1542596594-649edbc13630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
@@ -212,17 +206,17 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 85000,
     totalEngagement: '12K',
     engagementRate: 14.1,
-    emv: '$3.5K',
+    emv: '¥3.5K',
     safetyScore: 96,
     riskLevel: 'Safe',
     strengths: ['Deep Written Reviews', 'SEO Value', 'Scalp Health Focus'],
-    considerations: ['Low Video Capability', 'Platform Specific (Korea)'],
+    considerations: ['Low Video Capability', 'Platform Specific (Japan)'],
     avgViews: '45K',
     avgLikes: '8K',
     avgComments: '3.5K',
     avgShares: '500',
     fitScores: { reach: 55, resonance: 95, relevance: 98, reliability: 94, efficiency: 98 },
-    audienceGeo: 'South Korea',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Men & Women 25-50, Scalp Concern focused',
     campaignRecommendation: 'Deep dive into anti-hair fall and scalp barrier protection.',
     suggestedContent: '30-Day scalp transformation photo journal',
@@ -232,7 +226,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '6.5x', 
       totalEngagement: '250K', 
       totalImpressions: '1.1M', 
-      attributedRevenue: '$35K' 
+      attributedRevenue: '¥35K' 
     },
     isNew: false,
     brandAffinity: ['pro-v'],
@@ -257,7 +251,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 65000,
     totalEngagement: '5.5K',
     engagementRate: 8.4,
-    emv: '$2K',
+    emv: '¥2K',
     safetyScore: 99,
     riskLevel: 'Safe',
     strengths: ['Relatable', 'Quick Styling Tips', 'Anti-Humidity Focus'],
@@ -277,7 +271,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '4.8x', 
       totalEngagement: '120K', 
       totalImpressions: '500K', 
-      attributedRevenue: '$15K' 
+      attributedRevenue: '¥15K' 
     },
     isNew: true,
     brandAffinity: ['miracles', 'pro-v'],
@@ -302,7 +296,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 28000,
     totalEngagement: '4K',
     engagementRate: 14.2,
-    emv: '$1.2K',
+    emv: '¥1.2K',
     safetyScore: 92,
     riskLevel: 'Moderate',
     strengths: ['Viral Transformation Trends', 'Gen-Z Appeal', 'High Energy'],
@@ -312,7 +306,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '2K',
     avgShares: '5K',
     fitScores: { reach: 35, resonance: 99, relevance: 85, reliability: 80, efficiency: 99 },
-    audienceGeo: 'South Korea',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Gen-Z 13-24',
     campaignRecommendation: 'Before/After hair transformation challenges.',
     suggestedContent: 'Damage repair transition edit (TikTok sound trend)',
@@ -322,7 +316,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '8.5x', 
       totalEngagement: '300K', 
       totalImpressions: '2M', 
-      attributedRevenue: '$18K' 
+      attributedRevenue: '¥18K' 
     },
     isNew: true,
     brandAffinity: ['miracles'],
@@ -347,7 +341,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 450000,
     totalEngagement: '32K',
     engagementRate: 7.1,
-    emv: '$9K',
+    emv: '¥9K',
     safetyScore: 99,
     riskLevel: 'Safe',
     strengths: ['J-Beauty Minimalism', 'Aesthetic Vlog Style', 'Sustainability Focus'],
@@ -367,7 +361,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '4.5x', 
       totalEngagement: '900K', 
       totalImpressions: '5M', 
-      attributedRevenue: '$75K' 
+      attributedRevenue: '¥75K' 
     },
     isNew: false,
     brandAffinity: ['nutrient-blends', 'micellar'],
@@ -392,7 +386,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 3400000,
     totalEngagement: '250K',
     engagementRate: 7.3,
-    emv: '$60K',
+    emv: '¥60K',
     safetyScore: 98,
     riskLevel: 'Safe',
     strengths: ['A-list Status', 'Skincare/Haircare Crossover', 'Premium Endorsements'],
@@ -402,7 +396,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '12K',
     avgShares: '8K',
     fitScores: { reach: 100, resonance: 88, relevance: 90, reliability: 99, efficiency: 75 },
-    audienceGeo: 'South Korea, Global',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Broad Female Demographic 18-45',
     campaignRecommendation: 'Hero face of the brand for major regional campaigns.',
     suggestedContent: 'High-production commercial style reel',
@@ -412,7 +406,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '3.1x', 
       totalEngagement: '5.2M', 
       totalImpressions: '40M', 
-      attributedRevenue: '$650K' 
+      attributedRevenue: '¥650K' 
     },
     isNew: false,
     brandAffinity: ['miracles', 'nutrient-blends'],
@@ -424,7 +418,6 @@ export const INFLUENCERS: Influencer[] = [
     influencerCost: 75000,
     executionCost: 20000
   },
-  // --- REAL KOREAN BEAUTY INFLUENCERS ---
   {
     id: 'hannah_park',
     rank: 9,
@@ -438,17 +431,17 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 1200000,
     totalEngagement: '95K',
     engagementRate: 7.9,
-    emv: '$28K',
+    emv: '¥28K',
     safetyScore: 97,
     riskLevel: 'Safe',
-    strengths: ['K-Beauty Authority', 'Detailed Reviews', 'High Production Quality'],
+    strengths: ['J-Beauty Authority', 'Detailed Reviews', 'High Production Quality'],
     considerations: ['Premium pricing', 'Long lead times'],
     avgViews: '450K',
     avgLikes: '75K',
     avgComments: '5.2K',
     avgShares: '8.5K',
     fitScores: { reach: 92, resonance: 94, relevance: 96, reliability: 98, efficiency: 85 },
-    audienceGeo: 'South Korea, Global',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Women 18-35, Beauty Enthusiasts',
     campaignRecommendation: 'Perfect for luxury and premium haircare launches.',
     suggestedContent: 'Glass hair routine with Pantene Pro-V',
@@ -458,7 +451,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '4.0x', 
       totalEngagement: '1.8M', 
       totalImpressions: '12M', 
-      attributedRevenue: '$250K' 
+      attributedRevenue: '¥250K' 
     },
     isNew: false,
     brandAffinity: ['pro-v', 'miracles'],
@@ -483,7 +476,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 380000,
     totalEngagement: '28K',
     engagementRate: 7.4,
-    emv: '$7K',
+    emv: '¥7K',
     safetyScore: 96,
     riskLevel: 'Safe',
     strengths: ['Scalp Health Expert', 'Scientific Approach', 'Trustworthy'],
@@ -493,7 +486,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '1.8K',
     avgShares: '2.5K',
     fitScores: { reach: 72, resonance: 90, relevance: 95, reliability: 98, efficiency: 93 },
-    audienceGeo: 'South Korea',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Women 25-45, Scalp Health Focused',
     campaignRecommendation: 'Educational campaigns focusing on scalp care and hair health.',
     suggestedContent: 'Scalp detox and hair strengthening routine',
@@ -503,7 +496,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '5.2x', 
       totalEngagement: '650K', 
       totalImpressions: '3.8M', 
-      attributedRevenue: '$95K' 
+      attributedRevenue: '¥95K' 
     },
     isNew: false,
     brandAffinity: ['micellar', 'pro-v'],
@@ -528,7 +521,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 95000,
     totalEngagement: '12K',
     engagementRate: 12.6,
-    emv: '$2.5K',
+    emv: '¥2.5K',
     safetyScore: 94,
     riskLevel: 'Moderate',
     strengths: ['Gen-Z Relatable', 'Quick Tips', 'High Energy'],
@@ -548,7 +541,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '7.5x', 
       totalEngagement: '450K', 
       totalImpressions: '2.8M', 
-      attributedRevenue: '$42K' 
+      attributedRevenue: '¥42K' 
     },
     isNew: true,
     brandAffinity: ['miracles', 'pro-v'],
@@ -560,7 +553,6 @@ export const INFLUENCERS: Influencer[] = [
     influencerCost: 1200,
     executionCost: 300
   },
-  // --- JAPANESE BEAUTY INFLUENCERS ---
   {
     id: 'mai_tanaka',
     rank: 12,
@@ -574,7 +566,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 650000,
     totalEngagement: '42K',
     engagementRate: 6.5,
-    emv: '$12K',
+    emv: '¥12K',
     safetyScore: 98,
     riskLevel: 'Safe',
     strengths: ['J-Beauty Expertise', 'Salon Quality Content', 'Trusted Reviews'],
@@ -594,7 +586,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '3.8x', 
       totalEngagement: '1.1M', 
       totalImpressions: '7.5M', 
-      attributedRevenue: '$180K' 
+      attributedRevenue: '¥180K' 
     },
     isNew: false,
     brandAffinity: ['miracles', 'nutrient-blends'],
@@ -619,7 +611,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 48000,
     totalEngagement: '3.8K',
     engagementRate: 7.9,
-    emv: '$1.5K',
+    emv: '¥1.5K',
     safetyScore: 97,
     riskLevel: 'Safe',
     strengths: ['Relatable Lifestyle', 'Everyday Beauty', 'Authentic Voice'],
@@ -639,7 +631,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '5.5x', 
       totalEngagement: '160K', 
       totalImpressions: '750K', 
-      attributedRevenue: '$22K' 
+      attributedRevenue: '¥22K' 
     },
     isNew: true,
     brandAffinity: ['pro-v', 'micellar'],
@@ -664,7 +656,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 210000,
     totalEngagement: '22K',
     engagementRate: 10.5,
-    emv: '$5K',
+    emv: '¥5K',
     safetyScore: 95,
     riskLevel: 'Safe',
     strengths: ['Professional Stylist', 'Fast Tutorials', 'Practical Tips'],
@@ -684,7 +676,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '6.2x', 
       totalEngagement: '620K', 
       totalImpressions: '3.5M', 
-      attributedRevenue: '$78K' 
+      attributedRevenue: '¥78K' 
     },
     isNew: true,
     brandAffinity: ['pro-v', 'miracles'],
@@ -696,12 +688,12 @@ export const INFLUENCERS: Influencer[] = [
     influencerCost: 5500,
     executionCost: 1200
   },
-  // --- MORE KOREAN INFLUENCERS ---
+  // --- MORE JAPANESE BEAUTY INFLUENCERS ---
   {
     id: 'eunji_choi',
     rank: 15,
     name: 'Eunji Choi',
-    handle: '@eunji_kbeauty_glow',
+    handle: '@eunji_beauty_reviews',
     platform: 'YouTube',
     category: 'Macro Creators',
     type: 'Expert',
@@ -710,17 +702,17 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 890000,
     totalEngagement: '68K',
     engagementRate: 7.6,
-    emv: '$18K',
+    emv: '¥18K',
     safetyScore: 96,
     riskLevel: 'Safe',
-    strengths: ['K-Beauty Authority', 'Product Reviews', 'Detailed Analysis'],
+    strengths: ['J-Beauty Authority', 'Product Reviews', 'Detailed Analysis'],
     considerations: ['Long format content', 'High expectation'],
     avgViews: '520K',
     avgLikes: '85K',
     avgComments: '6.5K',
     avgShares: '9.8K',
     fitScores: { reach: 90, resonance: 92, relevance: 94, reliability: 97, efficiency: 86 },
-    audienceGeo: 'South Korea, Global',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Women 18-40, Beauty Lovers',
     campaignRecommendation: 'Detailed reviews and comparison content.',
     suggestedContent: 'Pantene vs. Luxury Haircare Comparison',
@@ -730,7 +722,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '4.2x', 
       totalEngagement: '2.2M', 
       totalImpressions: '15M', 
-      attributedRevenue: '$320K' 
+      attributedRevenue: '¥320K' 
     },
     isNew: false,
     brandAffinity: ['nutrient-blends', 'miracles'],
@@ -747,7 +739,7 @@ export const INFLUENCERS: Influencer[] = [
     rank: 16,
     name: 'Soojin Lee',
     handle: '@soojin_scalp',
-    platform: 'Naver Blog',
+    platform: 'Instagram',
     category: 'Micro Creators',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
@@ -755,7 +747,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 32000,
     totalEngagement: '4.8K',
     engagementRate: 15.0,
-    emv: '$1.8K',
+    emv: '¥1.8K',
     safetyScore: 97,
     riskLevel: 'Safe',
     strengths: ['Scalp Health Authority', 'SEO Focused', 'High Trust'],
@@ -765,7 +757,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '2.8K',
     avgShares: '350',
     fitScores: { reach: 35, resonance: 96, relevance: 100, reliability: 99, efficiency: 99 },
-    audienceGeo: 'South Korea',
+    audienceGeo: 'Japan',
     audienceDemographics: 'Adults 28-55, Scalp Health Conscious',
     campaignRecommendation: 'In-depth scalp care educational content.',
     suggestedContent: 'Complete guide to scalp health and hair fall prevention',
@@ -775,7 +767,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '8.0x', 
       totalEngagement: '180K', 
       totalImpressions: '850K', 
-      attributedRevenue: '$28K' 
+      attributedRevenue: '¥28K' 
     },
     isNew: false,
     brandAffinity: ['micellar', 'pro-v'],
@@ -800,7 +792,7 @@ export const INFLUENCERS: Influencer[] = [
     followersRaw: 55000,
     totalEngagement: '5.2K',
     engagementRate: 9.5,
-    emv: '$1.8K',
+    emv: '¥1.8K',
     safetyScore: 95,
     riskLevel: 'Safe',
     strengths: ['Authentic Content', 'J-Beauty Lover', 'Genuine Reviews'],
@@ -820,7 +812,7 @@ export const INFLUENCERS: Influencer[] = [
       avgROI: '6.0x', 
       totalEngagement: '190K', 
       totalImpressions: '1.1M', 
-      attributedRevenue: '$32K' 
+      attributedRevenue: '¥32K' 
     },
     isNew: true,
     brandAffinity: ['miracles', 'pro-v'],
@@ -834,10 +826,8 @@ export const INFLUENCERS: Influencer[] = [
   }
 ];
 
-// --- Backward-compatible alias for previous code expectations ---
 export const REAL_INFLUENCERS = INFLUENCERS;
 
-// --- Missing constants expected by RecommendModule.tsx ---
 export const OBJECTIVES = [
   { value: 'all-objectives', label: 'All Objectives' },
   { value: 'awareness', label: 'Awareness' },
@@ -851,17 +841,12 @@ export const PLATFORMS = [
   { value: 'instagram', label: 'Instagram' },
   { value: 'tiktok', label: 'TikTok' },
   { value: 'youtube', label: 'YouTube' },
-  { value: 'facebook', label: 'Facebook' },
-  { value: 'linkedin', label: 'LinkedIn' },
-  { value: 'twitter', label: 'Twitter' }
+  { value: 'line', label: 'LINE' },
+  { value: 'twitter', label: 'X (Twitter)' }
 ];
 
 export const GEOGRAPHIES = [
-  { value: 'global', label: 'Global' },
-  { value: 'us-eu-india', label: 'U.S. / Europe / India' },
-  { value: 'united-states', label: 'United States' },
-  { value: 'europe', label: 'Europe' },
-  { value: 'india', label: 'India' }
+  { value: 'japan', label: 'Japan' }
 ];
 
 export const CREATOR_TIERS = [
@@ -880,7 +865,6 @@ export const PRODUCT_MODELS = [
   { value: 'Pantene Nutrient Blends', label: 'Pantene Nutrient Blends' }
 ];
 
-// --- Lightweight type aliases for compatibility ---
 export type ProductLine = string;
 export type ProductModel = string;
 export type CampaignGeography = string;
@@ -888,7 +872,6 @@ export type CreatorCategory = string;
 
 import { activeBrand } from './brandConfig';
 
-// --- Product display names ---
 export const PRODUCT_DISPLAY_NAMES: Record<string, string> = {
   "pro-v": "Pantene Pro-V",
   "miracles": "Pantene Miracles",
@@ -896,13 +879,12 @@ export const PRODUCT_DISPLAY_NAMES: Record<string, string> = {
   "nutrient-blends": "Pantene Nutrient Blends"
 };
 
-// --- Product-specific campaign contexts ---
 export const PRODUCT_CONTEXTS: Record<string, {
   heritage: string; audience: string; tone: string;
   values: string; keyFeatures: string[];
 }> = {
   'pro-v': {
-    heritage: 'The foundational Pro-Vitamin B5 formula trusted globally for core strength and daily damage repair.',
+    heritage: 'The foundational Pro-Vitamin B5 formula trusted in Japan for core strength and daily damage repair.',
     audience: 'Everyday consumers looking for reliable, daily hair health and protection.',
     tone: 'Accessible, reliable, and uplifting.',
     values: 'Healthy, resilient hair should be achievable for everyone, every day.',
@@ -921,8 +903,7 @@ export const PRODUCT_CONTEXTS: Record<string, {
     tone: 'Fresh, clean, and clinical.',
     values: 'A healthy scalp is the foundation for beautiful hair; detoxify without stripping.',
     keyFeatures: ['0% silicones', 'Micellar water technology', 'Scalp pH balance']
-  }
-  ,
+  },
   'nutrient-blends': {
     heritage: 'A modern line blending botanical extracts and targeted actives for tailored hair wellness.',
     audience: 'Conscious consumers seeking ingredient-led benefits and lightweight performance.',
@@ -932,9 +913,6 @@ export const PRODUCT_CONTEXTS: Record<string, {
   }
 };
 
-// (Removed duplicated PRODUCT_OBJECTIVE_SUGGESTIONS — consolidated Pantene suggestions appear later in this file.)
-
-// Objective-specific goals
 export const OBJECTIVE_GOALS: Record<string, { goalLabel: string }> = {
   "awareness": { goalLabel: "Brand Awareness" },
   "engagement": { goalLabel: "Engagement" },
@@ -942,12 +920,11 @@ export const OBJECTIVE_GOALS: Record<string, { goalLabel: string }> = {
   "new-customers": { goalLabel: "New Customer Acquisition" }
 };
 
-// Product + Objective specific campaign suggestions for Pantene
 export const PRODUCT_OBJECTIVE_SUGGESTIONS: Record<string, Record<string, { title: string; description: string }[]>> = {
   "pro-v": {
     "awareness": [
       { title: "The 14-Day Core Strength Challenge", description: "Position Pantene Pro-V as the gold standard for daily damage repair. Highlight the Pro-Vitamin B5 formula rebuilding hair bonds from the inside out." },
-      { title: "Daily Pollution Defense", description: "Show how working professionals in urban centers use Pro-V to shield hair from environmental damage and micro-dust." },
+      { title: "Daily Pollution Defense", description: "Show how working professionals in urban centers use Pro-V to shield hair from environmental damage and urban pollution." },
       { title: "The Science of Pro-Vitamin B5", description: "Emphasize Swiss-heritage vitamin science and laboratory-proven metrics for core hair resilience." }
     ],
     "engagement": [
@@ -974,7 +951,7 @@ export const PRODUCT_OBJECTIVE_SUGGESTIONS: Record<string, Record<string, { titl
     ],
     "engagement": [
       { title: "#GlassHairTransformation", description: "Community visual highlights and transition edits showcasing dramatic before-and-after silkiness trends." },
-      { title: "Stylist Masterclass Series", description: "Partner with celebrity hair artists from Tokyo and Seoul to showcase at-home premium blowout treatments." },
+      { title: "Stylist Masterclass Series", description: "Partner with celebrity hair artists from Tokyo to showcase at-home premium blowout treatments." },
       { title: "Miracles Hair Challenge", description: "Host interactive social media sweepstakes where users tag their friends with bleached or damaged hair to win a routine kit." }
     ],
     "sales": [
@@ -996,7 +973,7 @@ export const PRODUCT_OBJECTIVE_SUGGESTIONS: Record<string, Record<string, { titl
     ],
     "engagement": [
       { title: "#ScalpDetoxRoutine", description: "Creative daily vlogs showing urban consumers resetting their scalps after long, hot commutes." },
-      { title: "Anti-Humidity Desk Setup", description: "Partner with corporate lifestyle micro-influCreators to showcase aesthetic office hair-refresh items during humid rainy seasons (*Tsuyu*)." },
+      { title: "Anti-Humidity Desk Setup", description: "Partner with corporate lifestyle micro-influencers to showcase aesthetic office hair-refresh items during humid rainy seasons (Tsuyu)." },
       { title: "The Clean Scalp Test", description: "Challenge wellness-focused audiences to track hair grease and weight reduction using micro-influencer step-by-step videos." }
     ],
     "sales": [
@@ -1009,8 +986,7 @@ export const PRODUCT_OBJECTIVE_SUGGESTIONS: Record<string, Record<string, { titl
       { title: "First Pure Scalp Cleanser", description: "Convert traditional shampoo users by introducing the skincare-inspired concept of active micellar water for roots." },
       { title: "Active Lifestyle Starter", description: "Help fitness, outdoor, and wellness enthusiasts build a gentle, everyday scalp-cleansing habit." }
     ]
-  }
-  ,
+  },
   "nutrient-blends": {
     "awareness": [
       { title: "Ingredient Stories", description: "Educate consumers on the provenance and benefits of each botanical blend for targeted hair needs." },
@@ -1035,7 +1011,6 @@ export const PRODUCT_OBJECTIVE_SUGGESTIONS: Record<string, Record<string, { titl
   }
 };
 
-// --- Default prompt suggestions used as fallback in UI ---
 export const DEFAULT_PROMPT_SUGGESTIONS = [
   { product: "Pantene Pro-V", title: "Daily Damage Shield", description: "Showcase Pro-V's core vitamin formula rebuilding daily resilience for urban consumers" },
   { product: "Pantene Miracles", title: "The Glass Hair Trend", description: "Position Miracles for intense damage repair and high-gloss viral visual transformations" },

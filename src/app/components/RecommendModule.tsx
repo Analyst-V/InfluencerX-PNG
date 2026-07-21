@@ -193,14 +193,8 @@ const generateInfluencers = (category: CreatorCategory, geo: CampaignGeography, 
     filtered = filtered.filter(inf => targetPlatforms.includes(inf.platform));
   }
   
-  if (geo !== 'Global') {
-    if (geo === 'Japan') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan'));
-    } else if (geo === 'South Korea') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('South Korea'));
-    } else if (geo === 'Both') {
-      filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan') || inf.audienceGeo.includes('South Korea'));
-    }
+  if (geo === 'Japan') {
+    filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan'));
   }
 
   // Ensure we have at least 5 influencers
@@ -807,7 +801,7 @@ export const RecommendModule = ({
   const [productLine, setProductLine] = useState<ProductLine>('pro-v');
   const [objective, setObjective] = useState<string>('awareness');
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [geography, setGeography] = useState<CampaignGeography>('Global');
+  const [geography, setGeography] = useState<CampaignGeography>('Japan');
   const [description, setDescription] = useState<string>('');
   const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('UGC');
   const [productFocus, setProductFocus] = useState<ProductModel>('All Models');
@@ -819,11 +813,8 @@ export const RecommendModule = ({
   const [selectedInfluencerForModal, setSelectedInfluencerForModal] = useState<Influencer | null>(null);
   const [showWarning, setShowWarning] = useState(false);
 
-  // Updated GEOGRAPHIES constant - removed Global, US, Europe, India, and added Japan, South Korea, Both
   const UPDATED_GEOGRAPHIES = [
-    { value: 'Japan', label: 'Japan' },
-    { value: 'South Korea', label: 'South Korea' },
-    { value: 'Both', label: 'Both' }
+    { value: 'Japan', label: 'Japan' }
   ];
 
   // Updated CREATOR_TIERS - removed bracketed text
@@ -875,15 +866,13 @@ export const RecommendModule = ({
       prompt = `Demonstrate ${derivedProductFocus} in a professional workflow. Highlight efficiency gains and reliability. Tone: Expert yet accessible.`;
     }
 
-    if (geography !== 'Global') {
-      prompt += ` Adapt messaging for ${geography} cultural nuances and localized trends.`;
-    }
+    prompt += ` Adapt messaging for Japan-specific cultural nuances and localized trends.`;
     return prompt;
   };
 
   const isFormValid = useMemo(() => {
-    return productLine && productLine !== 'all' && objective && objective !== 'all-objectives' && geography;
-  }, [productLine, objective, geography]);
+    return productLine && productLine !== 'all' && objective && objective !== 'all-objectives';
+  }, [productLine, objective]);
 
   const handleDescriptionSelect = (content: string) => {
     setDescription(content);

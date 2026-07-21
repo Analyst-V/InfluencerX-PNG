@@ -61,8 +61,8 @@ export const pantene: BrandConfig = {
   vendorName: "C5i",
   vendorLogo: vendorLogo,
 
-  primaryMarkets: ["South Korea", "Japan"],
-  defaultMarket: "South Korea",
+  primaryMarkets: ["Japan"],
+  defaultMarket: "Japan",
 
   primaryCategory: "Hair Care",
   relatedCategories: ["Skin Care", "Beauty", "Hair Care"],

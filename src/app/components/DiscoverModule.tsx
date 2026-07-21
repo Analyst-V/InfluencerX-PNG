@@ -43,7 +43,7 @@ export interface Theme {
   stage?: 'Emerging' | 'Growing' | 'Peaking' | 'Saturating'; // Market Trends only
 }
 
-// --- Consumer Themes data (Pantene / Hair Care, South Korea & Japan) ---
+// --- Consumer Themes data (Pantene / Hair Care, Japan) ---
 export const themes: Theme[] = [
   {
     id: '1',
@@ -207,7 +207,7 @@ export const themes: Theme[] = [
   }
 ];
 
-// --- Market Trends data (Skin Care, Beauty & Hair Care — South Korea & Japan) ---
+// --- Market Trends data (Skin Care, Beauty & Hair Care — Japan) ---
 export const marketTrends: Theme[] = [
   {
     id: 'mt1',

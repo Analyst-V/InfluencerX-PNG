@@ -217,7 +217,7 @@ export const Shell: React.FC<ShellProps> = ({
             label="Brand"
             value={brand}
             onChange={setBrand || (() => {})}
-            options={['All Brands', 'Pantene', 'Dove (Unilever)', 'Essential', 'TSUBAKI', 'Dr. Groot', '&honey']}
+            options={['All Brands', 'Pantene', 'Dove (Unilever)', 'Essential', 'TSUBAKI', '&honey']}
           />
 
           <FilterDropdown
@@ -231,7 +231,7 @@ export const Shell: React.FC<ShellProps> = ({
             label="Region" 
             value={region} 
             onChange={setRegion || (() => {})} 
-            options={['Both', 'South Korea', 'Japan']} 
+            options={['Japan']} 
           />
           
           <FilterDropdown 

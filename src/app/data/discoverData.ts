@@ -40,10 +40,10 @@ export const themes: Theme[] = [
     engagement: "1.4M",
     volume: "42.1K",
     type: "Neutral",
-    insight: "South Korean consumers are treating scalp care with the same multi-step rigor as skincare. There is high interest in 'scalp scaling' products, with users actively searching for clarifying, non-stripping ingredients like Cica and Tea Tree.",
+    insight: "Japanese consumers are treating scalp care with the same multi-step rigor as skincare. There is high interest in 'scalp balancing' products, with users actively searching for clarifying, non-stripping ingredients like Cica and Tea Tree.",
     verbatims: [
-      { text: "My hair condition improved so much after treating my scalp like my face. Does Pantene have a dedicated scalp scaling ampoule yet?", source: "Hwahae - Seoul" },
-      { text: "Seeing so many 10-step Korean hair routines on my feed. The focus is entirely on a clean, healthy scalp foundation rather than just masking split ends.", source: "Instagram - Incheon" }
+      { text: "My hair condition improved so much after treating my scalp like my face. Does Pantene have a dedicated scalp balancing ampoule yet?", source: "@cosme - Tokyo" },
+      { text: "Seeing so many 10-step J-beauty scalp routines on my feed. The focus is entirely on a clean, healthy scalp foundation rather than just masking split ends.", source: "Instagram - Tokyo" }
     ],
     size: 95,
     x: 45,
@@ -51,15 +51,15 @@ export const themes: Theme[] = [
   },
   {
     id: "theme-03",
-    name: "Glass Hair (Mul-Gwang) Shine",
+    name: "Glass Hair (Tsuyatsuya) Shine",
     sentiment: 82,
     engagement: "3.8M",
     volume: "110.5K",
     type: "Positive",
-    insight: "Driven by K-beauty trends, Gen Z and Millennial consumers across both markets are obsessed with achieving an ultra-glossy, liquid-like hair texture. Viral transformation videos highlight immediate, reflective shine as the ultimate sign of premium health.",
+    insight: "J-beauty trends are driving Gen Z and Millennial consumers toward ultra-glossy, liquid-like hair texture. Viral transformation videos highlight immediate, reflective shine as the ultimate sign of premium health.",
     verbatims: [
-      { text: "Tried the new Pantene intensive treatment treatment and my hair literally looks like a liquid waterfall under the bathroom light! #MulGwangHair", source: "TikTok - Seoul" },
-      { text: "Achieving that sleek Korean glass hair look at home is so easy now with the right water-treatment formulas.", source: "YouTube - Tokyo" }
+      { text: "Tried the new Pantene intensive treatment and my hair literally looks like a liquid waterfall under the bathroom light!", source: "TikTok - Tokyo" },
+      { text: "Achieving that sleek glass hair look at home is so easy now with the right water-treatment formulas.", source: "YouTube - Tokyo" }
     ],
     size: 140,
     x: 75,
@@ -72,9 +72,9 @@ export const themes: Theme[] = [
     engagement: "980K",
     volume: "38.9K",
     type: "Critical",
-    insight: "Anxiety around post-summer and early spring shedding is highly prevalent in both countries. Consumers actively seek root-strengthening solutions and express skepticism toward mainstream generic 'anti-hairfall' claims that lack scientific backing.",
+    insight: "Anxiety around post-summer and early spring shedding is highly prevalent in Japan. Consumers actively seek root-strengthening solutions and express skepticism toward mainstream generic 'anti-hairfall' claims that lack scientific backing.",
     verbatims: [
-      { text: "Every autumn my brush is full of broken hair. I need something that actually strengthens the roots, not just glues the split ends together.", source: "Naver Cafe - Busan" },
+      { text: "Every autumn my brush is full of broken hair. I need something that actually strengthens the roots, not just glues the split ends together.", source: "@cosme - Yokohama" },
       { text: "Noticeable breakage lately. Is it the climate shift or my shampoo? Switching to a dedicated root care line.", source: "X (Twitter) - Yokohama" }
     ],
     size: 85,
@@ -88,7 +88,7 @@ export const themes: Theme[] = [
     engagement: "2.7M",
     volume: "89.2K",
     type: "Positive",
-    insight: "Due to rising salon costs in Tokyo and Seoul, consumers are looking for professional alternatives at home. Discussions focus heavily on salon-inspired bond repair and Glycolic/Levulinic acid treatments to repair high-bleach damage from trendy hair colors.",
+    insight: "Due to rising salon costs in Tokyo, consumers are looking for professional alternatives at home. Discussions focus heavily on salon-inspired bond repair and Glycolic/Levulinic acid treatments to repair high-bleach damage from trendy hair colors.",
     verbatims: [
       { text: "Since bleaching my hair silver, salon visits are too expensive. This at-home acid treatment gives me that exact silky post-salon glide.", source: "Instagram - Kyoto" },
       { text: "The technology in drugstore hair masks now matches what my stylist uses. Pantene's latest formula saves me 15,000 yen a month.", source: "@cosme - Tokyo" }
@@ -104,10 +104,10 @@ export const themes: Theme[] = [
     engagement: "1.1M",
     volume: "31.4K",
     type: "Neutral",
-    insight: "Consumers are highly educated on ingredient lists, actively filtering out sulfates and heavy silicones. However, a growing sub-debate shows users demanding transparency over what *replaces* these chemicals, fearing alternative surfactants might cause scalp buildup.",
+    insight: "Consumers are highly educated on ingredient lists, actively filtering out sulfates and heavy silicones. However, a growing sub-debate shows users demanding transparency over what replaces these chemicals, fearing alternative surfactants might cause scalp buildup.",
     verbatims: [
-      { text: "It says sulfate-free, but when I check the back label, the cleansing agents still look quite harsh for sensitive scalps.", source: "Hwahae - Daegu" },
-      { text: "I prefer silicone-free for volume, but sometimes my ends feel like straw. We need clear guidance on how to balance both.", source: "Lipscosme - Nagoya" }
+      { text: "It says sulfate-free, but when I check the back label, the cleansing agents still look quite harsh for sensitive scalps.", source: "Lipscosme - Nagoya" },
+      { text: "I prefer silicone-free for volume, but sometimes my ends feel like straw. We need clear guidance on how to balance both.", source: "@cosme - Osaka" }
     ],
     size: 78,
     x: 50,
@@ -138,7 +138,7 @@ export const themes: Theme[] = [
     type: "Positive",
     insight: "Short-form video platforms dominate conversations with dramatic 5-second hair transformation clips. Products that deliver instantaneous, highly visual smoothing or volumizing effects generate rapid word-of-mouth momentum.",
     verbatims: [
-      { text: "Look at the comb test! My damaged hair went from a tangled bird's nest to completely straight in one wash.", source: "TikTok - Seoul" },
+      { text: "Look at the comb test! My damaged hair went from a tangled bird's nest to completely straight in one wash.", source: "TikTok - Osaka" },
       { text: "Saw a viral reel demonstrating the 'ring of light' reflection on hair after using this capsule serum. Had to buy it immediately.", source: "Instagram - Fukuoka" }
     ],
     size: 130,
@@ -152,9 +152,9 @@ export const themes: Theme[] = [
     engagement: "1.2M",
     volume: "48.3K",
     type: "Neutral",
-    insight: "An aging demographic skew in Japan, paired with early preventative hair concerns in South Korea, is driving discussions on hair thinning and loss of elasticity. Consumers feel current drugstore offerings focus too heavily on youth-centric styling rather than mature hair density.",
+    insight: "Japan's aging demographic is driving discussions on hair thinning and loss of elasticity. Consumers feel current drugstore offerings focus too heavily on youth-centric styling rather than mature hair density.",
     verbatims: [
-      { text: "My hair is losing its bounce and volume as I get older. Regular moisturizing shampoos just make it flat.", source: "Naver Cafe - Seoul" },
+      { text: "My hair is losing its bounce and volume as I get older. Regular moisturizing shampoos just make it flat.", source: "@cosme - Tokyo" },
       { text: "I wish drugstore brands would create elegant aging-care lines for hair that target volume right from the roots.", source: "@cosme - Saitama" }
     ],
     size: 90,
@@ -171,10 +171,10 @@ export const marketTrends = [
     engagement: "4.2M",
     volume: "125.0K",
     type: "Positive",
-    insight: "The 'scalp-as-skincare' movement is dominating both markets. Consumers are applying traditional facial skincare ingredients—like hyaluronic acid, ceramides, and salicylic acid—to their hair routines to treat the scalp as an extension of their face.",
+    insight: "The 'scalp-as-skincare' movement is dominating Japan. Consumers are applying traditional facial skincare ingredients—like hyaluronic acid, ceramides, and salicylic acid—to their hair routines to treat the scalp as an extension of their face.",
     verbatims: [
-      { text: "I started using a niacinamide scalp serum and my roots feel so much stronger. Hair care is just skincare now.", source: "Hwahae - Seoul" },
-      { text: "Looking for shampoos that treat my dry scalp with the same gentle care as my morning facial cleanser.", source: "@cosme - Tokyo" }
+      { text: "I started using a niacinamide scalp serum and my roots feel so much stronger. Hair care is just skincare now.", source: "@cosme - Tokyo" },
+      { text: "Looking for shampoos that treat my dry scalp with the same gentle care as my morning facial cleanser.", source: "Lipscosme - Osaka" }
     ],
     size: 135,
     x: 25,
@@ -184,15 +184,15 @@ export const marketTrends = [
   },
   {
     id: "trend-02",
-    name: "Glass Skin (Glass-myeok) / Translucent Complexion",
+    name: "Glass Hair (Tsuyatsuya) / Luminous Shine",
     sentiment: 85,
     engagement: "5.1M",
     volume: "189.3K",
     type: "Positive",
-    insight: "While South Korea continues to refine the ultra-dewy 'Glass Skin' look with high-gloss barrier creams, Japan's trend leans toward 'Bihaku' (translucent, luminous skin). Both prioritize deep, water-like hydration over heavy cosmetic coverage.",
+    insight: "Japan continues to refine the ultra-dewy hair aesthetic with high-gloss barrier treatments aligned with 'Bihaku' (translucent, luminous hair). Japanese consumers prioritize deep, water-like hydration and reflective shine over heavy cosmetic coverage.",
     verbatims: [
-      { text: "Achieving that transparent look requires layers of watery toners. The goal is to look naturally radiant, not makeup-heavy.", source: "Instagram - Seoul" },
-      { text: "Obsessed with finding base products that let your natural skin texture show through while giving a crystal-clear finish.", source: "Lipscosme - Kyoto" }
+      { text: "Achieving that transparent luminous look requires layers of watery treatments. The goal is to look naturally radiant, not product-heavy.", source: "Instagram - Tokyo" },
+      { text: "Obsessed with finding base products that let your natural hair texture shine through while giving a crystal-clear glossy finish.", source: "Lipscosme - Kyoto" }
     ],
     size: 140,
     x: 70,
@@ -207,9 +207,9 @@ export const marketTrends = [
     engagement: "3.4M",
     volume: "98.5K",
     type: "Positive",
-    insight: "Driven by sensitive skin concerns from environmental stressors and micro-dust, clinical derma-cosmetics are booming. Formulas featuring Cica (Centella Asiatica), Panthenol, and Mugwort are highly sought after for targeted skin barrier healing.",
+    insight: "Driven by sensitive skin concerns from environmental stressors and urban pollution, clinical derma-cosmetics are booming in Japan. Formulas featuring Cica (Centella Asiatica), Panthenol, and Mugwort are highly sought after for targeted skin barrier healing.",
     verbatims: [
-      { text: "Whenever my skin barrier breaks down from pollution, I immediately strip back my routine to just a medical-grade Cica balm.", source: "Naver Cafe - Incheon" },
+      { text: "Whenever my skin barrier breaks down from pollution, I immediately strip back my routine to just a medical-grade Cica balm.", source: "@cosme - Kyoto" },
       { text: "My dermatologist recommended switching to barrier-first brands. The redness around my cheeks subsided in days.", source: "YouTube - Tokyo" }
     ],
     size: 115,
@@ -245,7 +245,7 @@ export const marketTrends = [
     type: "Positive",
     insight: "Gen Z consumers are driving a shift toward ethical consumption, actively searching for certified vegan, cruelty-free, and reef-safe labels. However, skepticism remains regarding 'greenwashing', with users demanding rigorous third-party certifications.",
     verbatims: [
-      { text: "I only buy brands that have official Eve Vegan certification now. It's better for my body and the planet.", source: "Hwahae - Busan" },
+      { text: "I only buy brands that have official Eve Vegan certification now. It's better for my body and the planet.", source: "@cosme - Tokyo" },
       { text: "Many brands claim to be 'clean' but their packaging is still wrapped in excess plastic. We need true sustainability.", source: "X (Twitter) - Nagoya" }
     ],
     size: 105,
@@ -261,9 +261,9 @@ export const marketTrends = [
     engagement: "3.9M",
     volume: "112.4K",
     type: "Neutral",
-    insight: "Sun protection is treated as a non-negotiable health standard rather than seasonal care. The current focus is on specialized UV filters that double as lightweight serum-primers, offering blue-light protection, anti-pollution shields, and zero white cast.",
+    insight: "Sun protection is treated as a non-negotiable health standard rather than seasonal care in Japan. The current focus is on specialized UV filters that double as lightweight serum-primers, offering blue-light protection, anti-pollution shields, and zero white cast.",
     verbatims: [
-      { text: "Even indoors on a rainy winter day, blue light from my monitor causes pigmentation. A protective fluid gel is essential.", source: "YouTube - Seoul" },
+      { text: "Even indoors on a rainy winter day, blue light from my monitor causes pigmentation. A protective fluid gel is essential.", source: "YouTube - Tokyo" },
       { text: "The new serum-style sunscreens feel so weightless that I completely forget I'm wearing UV protection.", source: "@cosme - Yokohama" }
     ],
     size: 125,
@@ -281,7 +281,7 @@ export const marketTrends = [
     type: "Critical",
     insight: "Consumers increasingly believe that topical beauty is limited without internal support. High interest surrounds ingestible collagen, glutathione, and biotin, though critics call out the high price points and slow visible results of oral beauty supplements.",
     verbatims: [
-      { text: "Drinking liquid collagen daily definitely plumped my skin, but it's becoming way too expensive to maintain monthly.", source: "Naver Cafe - Seoul" },
+      { text: "Drinking liquid collagen daily definitely plumped my skin, but it's becoming way too expensive to maintain monthly.", source: "@cosme - Osaka" },
       { text: "So many beauty supplements claim to improve hair density, but I haven't seen a noticeable difference after three months of regular use.", source: "X (Twitter) - Saitama" }
     ],
     size: 85,

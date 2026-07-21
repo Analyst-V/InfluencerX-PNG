@@ -37,8 +37,8 @@ const KPI_DATA = [
   {
     id: 1,
     label: 'Est. Sales Lift',
-    subLabel: 'ROI from recent JP/KR campaigns',
-    value: '$1.2M',
+    subLabel: 'ROI from recent Japan campaigns',
+    value: '¥1.2M',
     growth: '+12%',
     icon: DollarSign,
     color: 'bg-blue-50 text-blue-600',
@@ -67,7 +67,7 @@ const KPI_DATA = [
   {
     id: 4,
     label: 'Audience Reach',
-    subLabel: 'Unique Beauty Consumers Reached (KR/JP)',
+    subLabel: 'Unique Beauty Consumers Reached (Japan)',
     value: '850k',
     growth: '+12%',
     icon: Sparkles,
@@ -114,8 +114,8 @@ const INFLUENCER_PERFORMANCE = [
   },
   {
     id: 3,
-    name: 'K-Hair Diary (Naver)',
-    platform: 'Naver Blog',
+    name: 'Tokyo Hair Diary',
+    platform: 'Blog',
     content: 'Review: Nutrient Blends 14-Day Challenge',
     status: 'Live',
     views: '850K',

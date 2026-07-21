@@ -491,9 +491,9 @@ useEffect(() => {
     };
 
     const formatCurrency = (n: number) => {
-        if (n >= 1000000) return `$${(n / 1000000).toFixed(1)}M`;
-        if (n >= 1000) return `$${(n / 1000).toFixed(0)}K`;
-        return `$${n.toLocaleString()}`;
+        if (n >= 1000000) return `¥${(n / 1000000).toFixed(1)}M`;
+        if (n >= 1000) return `¥${(n / 1000).toFixed(0)}K`;
+        return `¥${n.toLocaleString()}`;
     };
     const formatNumber = (n: number) => {
         if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
@@ -553,7 +553,7 @@ useEffect(() => {
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground mb-2 block">Investment Amount</label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">$</span>
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">¥</span>
                                     <Input
                                         type="number" value={budget}
                                         onChange={e => setBudget(Math.max(5000, Math.min(200000, Number(e.target.value))))}
@@ -564,9 +564,9 @@ useEffect(() => {
                             </div>
                             <div>
                                 <div className="flex justify-between text-xs text-muted-foreground mb-1">
-                                    <span>$1K</span>
-                                    <span>$10K</span>
-                                    <span>$20K</span>
+                                    <span>¥1K</span>
+                                    <span>¥10K</span>
+                                    <span>¥20K</span>
                                 </div>
                                 <Slider value={[budget]} onValueChange={([val]) => setBudget(val)} min={5000} max={200000} step={1000} className="w-full" />
                             </div>
@@ -753,11 +753,11 @@ useEffect(() => {
                                             </TableCell>
                                             <TableCell className="text-center font-medium">{inf.followers}</TableCell>
                                             <TableCell className="text-center font-medium">{inf.engagementRate}%</TableCell>
-                                            <TableCell className="text-center font-medium">${(inf.influencerCost || 5000).toLocaleString()}</TableCell>
-                                            <TableCell className="text-center font-medium">${(inf.executionCost || 2000).toLocaleString()}</TableCell>
+                                            <TableCell className="text-center font-medium">¥{(inf.influencerCost || 5000).toLocaleString()}</TableCell>
+                                            <TableCell className="text-center font-medium">¥{(inf.executionCost || 2000).toLocaleString()}</TableCell>
                                             <TableCell className="text-center">
                                                 <span className={`font-semibold ${isSelected ? 'text-foreground' : 'text-muted-foreground'}`}>
-                                                    ${inf.cost.toLocaleString()}
+                                                    ¥{inf.cost.toLocaleString()}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center">
