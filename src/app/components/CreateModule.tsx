@@ -511,7 +511,7 @@ useEffect(() => {
     };
 
     return (
-        <div className="flex flex-col bg-[#F5F5F5] font-sans text-[#1C1C1C] min-h-screen pb-12">
+       <div className="flex flex-col bg-[#F5F5F5] font-sans text-[#1C1C1C] min-h-screen pb-1 ">
             {/* 1. Header */}
             <div className="pt-8 pb-4 z-20 flex-shrink-0">
                 <div className="px-8 max-w-7xl mx-auto w-full">

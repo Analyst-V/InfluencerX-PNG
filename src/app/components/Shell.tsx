@@ -262,12 +262,8 @@ setBrand
 
         <div className="ml-auto flex items-center gap-2">
             <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input 
-                    type="text" 
-                    placeholder="Search intelligence..." 
-                    className="bg-gray-100/50 border border-gray-200 rounded-full py-1.5 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] w-64 transition-all"
-                />
+              
+               
             </div>
         </div>
       </div>

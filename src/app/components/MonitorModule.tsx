@@ -48,8 +48,8 @@ const KPI_DATA = [
     id: 2,
     label: 'Net Sentiment',
     subLabel: 'Brand Lift vs. Competitors',
-    value: '60%',
-    growth: '60%',
+    value: '20%',
+    growth: '20%',
     icon: TrendingUp,
     color: 'bg-red-50 text-[#2563EB]',
     iconColor: '#2563EB'
