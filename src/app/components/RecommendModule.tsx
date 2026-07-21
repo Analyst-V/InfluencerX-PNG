@@ -119,13 +119,13 @@ const PlatformIcon = ({ platform, size = 20 }: { platform: string, size?: number
 
 // --- Format Helpers ---
 const formatNumber = (num: number): string => {
-  if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-  if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-  return num.toLocaleString();
+  if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M`;
+  if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  return num.toLocaleString('en-US');
 };
 
 const formatFollowersWithCommas = (num: number): string => {
-  return num.toLocaleString();
+  return formatNumber(num);
 };
 
 // Real influencer data is imported from ../data/recommendData
@@ -187,30 +187,80 @@ const calculateEngagementBreakdown = (followers: number, engagementRate: number)
 };
 
 const generateInfluencers = (category: CreatorCategory, geo: CampaignGeography, targetPlatforms: string[]): Influencer[] => {
-  let filtered = REAL_INFLUENCERS.filter(inf => inf.category === category);
+  // Helper to force mock follower counts into the selected tier range
+  const getTierFollowers = (tier: CreatorCategory, originalFollowers: number, index: number): number => {
+    const ranges: Record<CreatorCategory, [number, number]> = {
+      'Nano': [2000, 9500],
+      'Micro': [12000, 85000],
+      'Macro': [150000, 850000],
+      'Mega': [1200000, 4500000],
+    };
+    const [min, max] = ranges[tier] || [10000, 100000];
+    
+    // Keep count if it's already naturally within the selected tier range
+    if (tier === 'Mega' && originalFollowers >= 1000000) return originalFollowers;
+    if (tier === 'Macro' && originalFollowers >= 100000 && originalFollowers < 1000000) return originalFollowers;
+    if (tier === 'Micro' && originalFollowers >= 10000 && originalFollowers < 100000) return originalFollowers;
+    if (tier === 'Nano' && originalFollowers >= 1000 && originalFollowers < 10000) return originalFollowers;
 
+    // Generate a clean mock value within tier range for fallbacks
+    const spread = [0.25, 0.45, 0.65, 0.85, 0.95];
+    const factor = spread[index % spread.length];
+    const val = Math.round(min + (max - min) * factor);
+    
+    // Round to clean numbers (nearest 1K or 100K)
+    if (val >= 1000000) return Math.round(val / 100000) * 100000;
+    if (val >= 100000) return Math.round(val / 10000) * 10000;
+    return Math.round(val / 1000) * 1000;
+  };
+
+  // 1. Initial filter by tier
+  let filtered = REAL_INFLUENCERS.filter(inf => {
+    const followers = inf.followersRaw;
+    switch (category) {
+      case 'Nano': return followers >= 1000 && followers < 10000;
+      case 'Micro': return followers >= 10000 && followers < 100000;
+      case 'Macro': return followers >= 100000 && followers < 1000000;
+      case 'Mega': return followers >= 1000000;
+      default: return true;
+    }
+  });
+
+  // 2. Platform filter
   if (targetPlatforms.length > 0) {
     filtered = filtered.filter(inf => targetPlatforms.includes(inf.platform));
   }
   
+  // 3. Geo filter
   if (geo === 'Japan') {
     filtered = filtered.filter(inf => inf.audienceGeo.includes('Japan'));
   }
 
-  // Ensure we have at least 5 influencers
-  if (filtered.length < 5) {
-    const filteredIds = new Set(filtered.map(inf => inf.id));
+  // 4. Fill with fallbacks if under 5
+  let result = [...filtered];
+  if (result.length < 5) {
+    const existingIds = new Set(result.map(inf => inf.id));
     const fallbacks = REAL_INFLUENCERS
-      .filter(inf => !filteredIds.has(inf.id))
+      .filter(inf => !existingIds.has(inf.id))
       .sort((a, b) => b.engagementRate - a.engagementRate);
-    
+
     for (const fb of fallbacks) {
-      if (filtered.length >= 5) break;
-      filtered.push(fb);
+      if (result.length >= 5) break;
+      result.push(fb);
     }
   }
 
-  return filtered.sort((a, b) => b.engagementRate - a.engagementRate);
+  // 5. Ensure all returned creators adhere to the selected tier follower range
+  result = result.map((inf, idx) => {
+    const adjustedFollowers = getTierFollowers(category, inf.followersRaw, idx);
+    return {
+      ...inf,
+      followersRaw: adjustedFollowers,
+      followers: formatNumber(adjustedFollowers)
+    };
+  });
+
+  return result.sort((a, b) => b.engagementRate - a.engagementRate);
 };
 
 // --- Influencer Detail Modal Component ---
@@ -811,7 +861,7 @@ export const RecommendModule = ({
   const [platforms, setPlatforms] = useState<string[]>([]);
   const [geography, setGeography] = useState<CampaignGeography>('Japan');
   const [description, setDescription] = useState<string>('');
-  const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('Nano');
+  const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('Micro');
   const [productFocus, setProductFocus] = useState<ProductModel>('All Models');
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(false);
 
@@ -1408,7 +1458,7 @@ export const RecommendModule = ({
                               </div>
                             </td>
                             <td className="px-4 py-3 text-center">
-                              <span className="font-semibold text-[#1C1C1C]">{formatFollowersWithCommas(inf.followersRaw)}</span>
+                              <span className="font-semibold text-[#1C1C1C]">{formatNumber(inf.followersRaw)}</span>
                             </td>
                             <td className="px-4 py-3 text-center">
                               <span className="font-semibold text-[#1C1C1C]">{breakdown.totalFormatted}</span>
@@ -1434,10 +1484,15 @@ export const RecommendModule = ({
                               </span>
                             </td>
                             <td className="px-4 py-3 text-center">
-                              <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-semibold border border-emerald-100">
-                                {reliability}
-                              </span>
-                            </td>
+  <span className={clsx(
+    "px-2 py-0.5 rounded text-xs font-semibold border",
+    reliability >= 80 ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
+    reliability >= 40 ? "bg-amber-50 text-amber-700 border-amber-200" :
+    "bg-rose-50 text-rose-700 border-rose-200"
+  )}>
+    {reliability}
+  </span>
+</td>
                             <td className="px-4 py-3 text-center">
                               {getSafetyBadge(inf.safetyScore)}
                             </td>
