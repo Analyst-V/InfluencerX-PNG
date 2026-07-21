@@ -1,4 +1,4 @@
-// Extracted from RecommendModule.tsx
+// Extracted from RecommendModule.tsx - UPDATED with CQI field and Moderate risk reliability between 40-60
 
 export type PerformanceMetric = { week: string; value: number };
 
@@ -34,6 +34,7 @@ export interface Influencer {
   avgComments: string; 
   avgShares: string;
   fitScores: { reach: number; resonance: number; relevance: number; reliability: number; efficiency: number; }; 
+  cqi: number; // NEW: CQI (Creator Quality Index) - right next to Relevance in Recommended view
   audienceGeo: string; 
   audienceDemographics: string; 
   campaignRecommendation: string;
@@ -57,6 +58,18 @@ export const PRODUCT_LINES = [
   { value: 'nutrient-blends', label: 'Pantene Nutrient Blends' }
 ];
 
+// Helper function to generate CQI score (0-100)
+// CQI = weighted combination of safetyScore (60%) and engagementRate (40%)
+const generateCQI = (safetyScore: number, engagementRate: number): number => {
+  const normalizedEngagement = Math.min(engagementRate * 10, 100);
+  return Math.round((safetyScore * 0.6) + (normalizedEngagement * 0.4));
+};
+
+// Ensure Moderate risk has reliability between 40-60
+const adjustReliabilityForModerateRisk = (reliability: number): number => {
+  return Math.max(40, Math.min(60, reliability));
+};
+
 export const INFLUENCERS: Influencer[] = [
   {
     id: 'sakura_tanaka',
@@ -64,7 +77,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Sakura Tanaka',
     handle: '@sakura_hair_diary',
     platform: 'Instagram',
-    category: 'Macro Creators',
+    category: 'Macro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '850K',
@@ -81,6 +94,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '1.2K',
     avgShares: '3.8K',
     fitScores: { reach: 85, resonance: 96, relevance: 98, reliability: 99, efficiency: 88 },
+    cqi: generateCQI(98, 5.2),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 18-34, Beauty Enthusiasts',
     campaignRecommendation: 'Perfect for Pantene Miracles premium tier product launch.',
@@ -109,7 +123,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Ji-eun Lee',
     handle: '@jieun_beauty_trends',
     platform: 'YouTube',
-    category: 'Enterprise',
+    category: 'Mega',
     type: 'Veteran',
     avatarUrl: 'https://images.unsplash.com/photo-1601288496920-b6154fe3626a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '2.1M',
@@ -126,6 +140,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '8.5K',
     avgShares: '15K',
     fitScores: { reach: 98, resonance: 92, relevance: 95, reliability: 97, efficiency: 80 },
+    cqi: generateCQI(95, 8.5),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 16-29, Trend Followers',
     campaignRecommendation: 'Broad awareness campaigns focusing on the Skinification of hair.',
@@ -154,7 +169,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Kenji Sato',
     handle: '@kenji_salon_pro',
     platform: 'TikTok',
-    category: 'Mid-tier Creators',
+    category: 'Micro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '320K',
@@ -171,6 +186,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '800',
     avgShares: '9.2K',
     fitScores: { reach: 70, resonance: 98, relevance: 100, reliability: 99, efficiency: 95 },
+    cqi: generateCQI(99, 10.9),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 25-45, Haircare Shoppers',
     campaignRecommendation: 'Ingredient transparency and sulfate-free formula education.',
@@ -199,7 +215,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Min-jun Park',
     handle: '@minjun_scalpcare',
     platform: 'Instagram',
-    category: 'Micro Creators',
+    category: 'Nano',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1542596594-649edbc13630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '85K',
@@ -216,6 +232,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '3.5K',
     avgShares: '500',
     fitScores: { reach: 55, resonance: 95, relevance: 98, reliability: 94, efficiency: 98 },
+    cqi: generateCQI(96, 14.1),
     audienceGeo: 'Japan',
     audienceDemographics: 'Men & Women 25-50, Scalp Concern focused',
     campaignRecommendation: 'Deep dive into anti-hair fall and scalp barrier protection.',
@@ -244,7 +261,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Yui Takahashi',
     handle: '@yui_everyday_style',
     platform: 'Instagram',
-    category: 'Micro Creators',
+    category: 'Nano',
     type: 'Lifestyle',
     avatarUrl: 'https://th.bing.com/th/id/OIP.GPERQlh9OIFNrcZ8m5ph4gAAAA?w=138&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3',
     followers: '65K',
@@ -261,6 +278,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '400',
     avgShares: '600',
     fitScores: { reach: 45, resonance: 88, relevance: 90, reliability: 98, efficiency: 97 },
+    cqi: generateCQI(99, 8.4),
     audienceGeo: 'Japan',
     audienceDemographics: 'Working Women 22-35, Tokyo based',
     campaignRecommendation: 'Showcasing frizz control during Japanese humid summers (Tsuyu).',
@@ -289,7 +307,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Soo-ah Kim',
     handle: '@sooah_glowup',
     platform: 'TikTok',
-    category: 'UGC',
+    category: 'Nano',
     type: 'Authentic',
     avatarUrl: 'https://images.unsplash.com/photo-1617922001439-4a2e6562f328?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '28K',
@@ -305,7 +323,9 @@ export const INFLUENCERS: Influencer[] = [
     avgLikes: '18K',
     avgComments: '2K',
     avgShares: '5K',
-    fitScores: { reach: 35, resonance: 99, relevance: 85, reliability: 80, efficiency: 99 },
+    // reliability adjusted to 40-60 for Moderate risk
+    fitScores: { reach: 35, resonance: 99, relevance: 85, reliability: adjustReliabilityForModerateRisk(80), efficiency: 99 },
+    cqi: generateCQI(92, 14.2),
     audienceGeo: 'Japan',
     audienceDemographics: 'Gen-Z 13-24',
     campaignRecommendation: 'Before/After hair transformation challenges.',
@@ -334,7 +354,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Rina Suzuki',
     handle: '@rina_minimalist',
     platform: 'YouTube',
-    category: 'Mid-tier Creators',
+    category: 'Micro',
     type: 'Curator',
     avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '450K',
@@ -351,6 +371,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '800',
     avgShares: '1.2K',
     fitScores: { reach: 75, resonance: 94, relevance: 92, reliability: 98, efficiency: 92 },
+    cqi: generateCQI(99, 7.1),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 20-35, Eco-conscious',
     campaignRecommendation: 'Highlighting packaging sustainability and clean ingredients.',
@@ -379,7 +400,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Chae-won Choi',
     handle: '@chaewon_official',
     platform: 'Instagram',
-    category: 'Enterprise',
+    category: 'Mega',
     type: 'Veteran',
     avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '3.4M',
@@ -396,6 +417,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '12K',
     avgShares: '8K',
     fitScores: { reach: 100, resonance: 88, relevance: 90, reliability: 99, efficiency: 75 },
+    cqi: generateCQI(98, 7.3),
     audienceGeo: 'Japan',
     audienceDemographics: 'Broad Female Demographic 18-45',
     campaignRecommendation: 'Hero face of the brand for major regional campaigns.',
@@ -424,7 +446,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Hannah Park',
     handle: '@hannah_park_beauty',
     platform: 'YouTube',
-    category: 'Macro Creators',
+    category: 'Macro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '1.2M',
@@ -441,6 +463,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '5.2K',
     avgShares: '8.5K',
     fitScores: { reach: 92, resonance: 94, relevance: 96, reliability: 98, efficiency: 85 },
+    cqi: generateCQI(97, 7.9),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 18-35, Beauty Enthusiasts',
     campaignRecommendation: 'Perfect for luxury and premium haircare launches.',
@@ -469,7 +492,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Minji Kim',
     handle: '@minji_skin_hair',
     platform: 'Instagram',
-    category: 'Mid-tier Creators',
+    category: 'Micro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '380K',
@@ -486,6 +509,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '1.8K',
     avgShares: '2.5K',
     fitScores: { reach: 72, resonance: 90, relevance: 95, reliability: 98, efficiency: 93 },
+    cqi: generateCQI(96, 7.4),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 25-45, Scalp Health Focused',
     campaignRecommendation: 'Educational campaigns focusing on scalp care and hair health.',
@@ -514,7 +538,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Sana Yamamoto',
     handle: '@sana_tokyo_beauty',
     platform: 'TikTok',
-    category: 'UGC',
+    category: 'Nano',
     type: 'Authentic',
     avatarUrl: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '95K',
@@ -530,7 +554,9 @@ export const INFLUENCERS: Influencer[] = [
     avgLikes: '35K',
     avgComments: '3.2K',
     avgShares: '8K',
-    fitScores: { reach: 60, resonance: 96, relevance: 88, reliability: 85, efficiency: 98 },
+    // reliability adjusted to 40-60 for Moderate risk
+    fitScores: { reach: 60, resonance: 96, relevance: 88, reliability: adjustReliabilityForModerateRisk(85), efficiency: 98 },
+    cqi: generateCQI(94, 12.6),
     audienceGeo: 'Japan',
     audienceDemographics: 'Gen-Z 16-25, Trend Followers',
     campaignRecommendation: 'Viral challenges and quick transformation content.',
@@ -559,7 +585,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Mai Tanaka',
     handle: '@mai_beauty_lab',
     platform: 'YouTube',
-    category: 'Macro Creators',
+    category: 'Macro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1554151228-14d9bef656c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '650K',
@@ -576,6 +602,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '2.8K',
     avgShares: '4.2K',
     fitScores: { reach: 82, resonance: 90, relevance: 94, reliability: 99, efficiency: 88 },
+    cqi: generateCQI(98, 6.5),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 22-40, Quality Seekers',
     campaignRecommendation: 'Quality-focused campaigns emphasizing salon-grade results.',
@@ -604,7 +631,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Haruka Watanabe',
     handle: '@haruka_daily_style',
     platform: 'Instagram',
-    category: 'Micro Creators',
+    category: 'Nano',
     type: 'Lifestyle',
     avatarUrl: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '48K',
@@ -621,6 +648,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '450',
     avgShares: '380',
     fitScores: { reach: 40, resonance: 89, relevance: 88, reliability: 97, efficiency: 96 },
+    cqi: generateCQI(97, 7.9),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 22-32, Urban Professionals',
     campaignRecommendation: 'Everyday hair care routines for busy professionals.',
@@ -649,7 +677,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Yuki Nakamura',
     handle: '@yuki_hair_stylist',
     platform: 'TikTok',
-    category: 'Mid-tier Creators',
+    category: 'Micro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '210K',
@@ -666,6 +694,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '1.5K',
     avgShares: '6.2K',
     fitScores: { reach: 65, resonance: 95, relevance: 98, reliability: 96, efficiency: 97 },
+    cqi: generateCQI(95, 10.5),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 20-40, Hair Enthusiasts',
     campaignRecommendation: 'Professional styling tips using Pantene products.',
@@ -688,14 +717,13 @@ export const INFLUENCERS: Influencer[] = [
     influencerCost: 5500,
     executionCost: 1200
   },
-  // --- MORE JAPANESE BEAUTY INFLUENCERS ---
   {
     id: 'eunji_choi',
     rank: 15,
     name: 'Eunji Choi',
     handle: '@eunji_beauty_reviews',
     platform: 'YouTube',
-    category: 'Macro Creators',
+    category: 'Macro',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '890K',
@@ -712,6 +740,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '6.5K',
     avgShares: '9.8K',
     fitScores: { reach: 90, resonance: 92, relevance: 94, reliability: 97, efficiency: 86 },
+    cqi: generateCQI(96, 7.6),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 18-40, Beauty Lovers',
     campaignRecommendation: 'Detailed reviews and comparison content.',
@@ -740,7 +769,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Soojin Lee',
     handle: '@soojin_scalp',
     platform: 'Instagram',
-    category: 'Micro Creators',
+    category: 'Nano',
     type: 'Expert',
     avatarUrl: 'https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '32K',
@@ -757,6 +786,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '2.8K',
     avgShares: '350',
     fitScores: { reach: 35, resonance: 96, relevance: 100, reliability: 99, efficiency: 99 },
+    cqi: generateCQI(97, 15.0),
     audienceGeo: 'Japan',
     audienceDemographics: 'Adults 28-55, Scalp Health Conscious',
     campaignRecommendation: 'In-depth scalp care educational content.',
@@ -785,7 +815,7 @@ export const INFLUENCERS: Influencer[] = [
     name: 'Juri Tanaka',
     handle: '@juri_japanbeauty',
     platform: 'Instagram',
-    category: 'UGC',
+    category: 'Nano',
     type: 'Authentic',
     avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
     followers: '55K',
@@ -802,6 +832,7 @@ export const INFLUENCERS: Influencer[] = [
     avgComments: '520',
     avgShares: '980',
     fitScores: { reach: 42, resonance: 92, relevance: 90, reliability: 96, efficiency: 97 },
+    cqi: generateCQI(95, 9.5),
     audienceGeo: 'Japan',
     audienceDemographics: 'Women 20-32, Authentic Beauty Seekers',
     campaignRecommendation: 'Authentic user experience and real reviews.',
@@ -850,11 +881,10 @@ export const GEOGRAPHIES = [
 ];
 
 export const CREATOR_TIERS = [
-  { value: 'UGC', label: 'UGC (Authenticity)' },
-  { value: 'Micro Creators', label: 'Micro (High Engagement)' },
-  { value: 'Mid-tier Creators', label: 'Mid-Tier (Balance)' },
-  { value: 'Macro Creators', label: 'Macro (Reach)' },
-  { value: 'Enterprise', label: 'Enterprise (Authority)' }
+  { value: 'Nano', label: 'Nano (Authenticity)' },
+  { value: 'Micro', label: 'Micro (High Engagement)' },
+  { value: 'Macro', label: 'Macro (Balance)' },
+  { value: 'Mega', label: 'Mega (Reach)' }
 ];
 
 export const PRODUCT_MODELS = [

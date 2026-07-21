@@ -449,19 +449,20 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
   }, []);
 
   React.useEffect(() => {
-    if (viewMode === 'market-trends') {
-      setVisualMode('list');
-    } else {
-      setVisualMode('bubbles');
-    }
-  }, [viewMode]);
-
-  const [visualMode, setVisualMode] = useState<'bubbles' | 'list'>(viewMode === 'market-trends' ? 'list' : 'bubbles');
+  if (viewMode === 'market-trends') {
+    setVisualMode('bubbles');
+  } else {
+    setVisualMode('bubbles');
+  }
+}, [viewMode]);
+const [visualMode, setVisualMode] = useState<'bubbles' | 'list'>(
+  viewMode === 'market-trends' ? 'bubbles' : 'bubbles'
+);
   const [selectedThemeId, setSelectedThemeId] = useState<string | null>(null);
   const [showDebugBorders, setShowDebugBorders] = useState(false);
 
   // Controls bubble size (0.65 = 65% of original size)
-  const BUBBLE_SIZE_SCALE = 0.9;
+  const BUBBLE_SIZE_SCALE = 0.95;
 
   const currentThemes = viewMode === 'market-trends' ? marketTrends : themes;
   const selectedTheme = currentThemes.find(t => t.id === selectedThemeId);
@@ -619,7 +620,7 @@ export const DiscoverModule: React.FC<DiscoverModuleProps> = ({ onNavigateToReco
                            <div className="relative">
                               <span 
                                   style={{ color: textColor, textShadow }}
-                                  className="font-bold text-[11px] leading-tight pointer-events-none select-none font-inter tracking-tight block"
+                                  className="font-bold text-[13px] leading-tight pointer-events-none select-none font-inter tracking-tight block"
                               >
                                 {theme.name}
                               </span>

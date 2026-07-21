@@ -803,7 +803,7 @@ export const RecommendModule = ({
   const [platforms, setPlatforms] = useState<string[]>([]);
   const [geography, setGeography] = useState<CampaignGeography>('Japan');
   const [description, setDescription] = useState<string>('');
-  const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('UGC');
+  const [creatorCategory, setCreatorCategory] = useState<CreatorCategory>('Nano');
   const [productFocus, setProductFocus] = useState<ProductModel>('All Models');
   // NEW: Live Streaming Campaign toggle
   const [isLiveStreaming, setIsLiveStreaming] = useState<boolean>(false);
@@ -817,13 +817,12 @@ export const RecommendModule = ({
     { value: 'Japan', label: 'Japan' }
   ];
 
-  // Updated CREATOR_TIERS - removed bracketed text
+  // Updated CREATOR_TIERS - now using standardized tier values
   const UPDATED_CREATOR_TIERS = [
-    { value: 'UGC', label: 'UGC' },
-    { value: 'Macro Creators', label: 'Macro Creators' },
-    { value: 'Enterprise', label: 'Enterprise' },
-    { value: 'B2B Tech', label: 'B2B Tech' },
-    { value: 'Micro Influencers', label: 'Micro Influencers' }
+    { value: 'Nano', label: 'Nano' },
+    { value: 'Micro', label: 'Micro' },
+    { value: 'Macro', label: 'Macro' },
+    { value: 'Mega', label: 'Mega' }
   ];
 
   // Updated PLATFORMS - renamed Twitter to X (Twitter)
@@ -856,12 +855,14 @@ export const RecommendModule = ({
 
   const getPrompt = () => {
     let prompt = "";
-    if (creatorCategory === 'UGC') {
+    if (creatorCategory === 'Nano') {
       prompt = `Create authentic, slice-of-life content showing how ${derivedProductFocus} solves real daily problems. Tone should be casual, relatable, and shot on mobile. Focus on practical use cases and everyday scenarios.`;
-    } else if (creatorCategory === 'Macro Creators') {
+    } else if (creatorCategory === 'Micro') {
+      prompt = `Create engaging content with high authenticity. ${derivedProductFocus} should be integrated naturally into lifestyle content. Focus on building trust and demonstrating real value.`;
+    } else if (creatorCategory === 'Macro') {
       prompt = `Position ${derivedProductFocus} as an industry-leading innovation. Content should be high-production value, authoritative, and benchmark-driven. Compare directly with competitors using data.`;
-    } else if (creatorCategory === 'Enterprise') {
-      prompt = `Showcase ${derivedProductFocus} in enterprise environments. Highlight security, reliability, and professional-grade features. Tone: Executive, trustworthy, and business-focused.`;
+    } else if (creatorCategory === 'Mega') {
+      prompt = `Showcase ${derivedProductFocus} in premium, high-visibility environments. Highlight prestige, reliability, and professional-grade features. Tone: Executive, trustworthy, and business-focused.`;
     } else {
       prompt = `Demonstrate ${derivedProductFocus} in a professional workflow. Highlight efficiency gains and reliability. Tone: Expert yet accessible.`;
     }
@@ -1306,154 +1307,170 @@ export const RecommendModule = ({
             </div>
 
             {/* Influencer Table */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex-1 flex flex-col">
-              <div className="overflow-auto flex-1">
-                <table className="w-full">
-                  <thead className="bg-gray-50/80 sticky top-0 z-10">
-                    <tr className="border-b border-gray-200">
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">
-                        <button 
-                          onClick={() => {
-                            // Toggle select all
-                            const allIds = influencers.map(inf => inf.id);
-                            const allSelected = allIds.every(id => selectedInfluencerIds.includes(id));
-                            if (allSelected) {
-                              setSelectedInfluencerIds([]);
-                            } else {
-                              setSelectedInfluencerIds(allIds);
-                            }
-                          }}
-                          className="hover:text-[#2563EB] transition-colors"
-                        >
-                          {influencers.every(inf => selectedInfluencerIds.includes(inf.id)) ? (
-                            <CheckSquare size={18} className="text-[#2563EB]" />
-                          ) : (
-                            <Square size={18} className="text-gray-400" />
-                          )}
-                        </button>
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Influencer</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Followers</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                        <span className="inline-flex items-center gap-1">Engagement <Info className="h-3 w-3" /></span>
-                      </th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Resonance</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Relevance</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Reliability</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Safety</th>
-                      <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Risk</th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider min-w-[200px]">Action Insights</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {isLoading ? (
-                      Array.from({ length: 5 }).map((_, i) => (
-                        <LoadingSkeleton key={i} />
-                      ))
+            {/* Influencer Table */}
+<div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex-1 flex flex-col">
+  <div className="overflow-auto flex-1">
+    <table className="w-full">
+      <thead className="bg-gray-50/80 sticky top-0 z-10">
+        <tr className="border-b border-gray-200">
+          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider w-16">
+            <button 
+              onClick={() => {
+                // Toggle select all
+                const allIds = influencers.map(inf => inf.id);
+                const allSelected = allIds.every(id => selectedInfluencerIds.includes(id));
+                if (allSelected) {
+                  setSelectedInfluencerIds([]);
+                } else {
+                  setSelectedInfluencerIds(allIds);
+                }
+              }}
+              className="hover:text-[#2563EB] transition-colors"
+            >
+              {influencers.every(inf => selectedInfluencerIds.includes(inf.id)) ? (
+                <CheckSquare size={18} className="text-[#2563EB]" />
+              ) : (
+                <Square size={18} className="text-gray-400" />
+              )}
+            </button>
+          </th>
+          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Influencer</th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Followers</th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1">Engagement <Info className="h-3 w-3" /></span>
+          </th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Resonance</th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Relevance</th>
+          {/* NEW: CQI column - right next to Relevance */}
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1">CQI <Info className="h-3 w-3" /></span>
+          </th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Reliability</th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Safety</th>
+          <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Risk</th>
+          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider min-w-[200px]">Action Insights</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-gray-100">
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <LoadingSkeleton key={i} />
+          ))
+        ) : (
+          influencers.map((inf, index) => {
+            const isSelected = selectedInfluencerIds.includes(inf.id);
+            const breakdown = calculateEngagementBreakdown(inf.followersRaw, inf.engagementRate);
+            const resonance = Math.min(Math.round(inf.engagementRate * 10 * 0.95), 98);
+            const relevance = Math.min(Math.round(inf.safetyScore * 0.92 + inf.engagementRate * 2), 99);
+            const reliability = Math.min(Math.round(inf.safetyScore * 0.95), 98);
+            
+            return (
+              <tr 
+                key={inf.id}
+                className={clsx(
+                  "hover:bg-gray-50/50 transition-colors",
+                  isSelected ? "bg-blue-50/30" : ""
+                )}
+              >
+                <td className="px-4 py-3">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSelection(inf.id);
+                    }}
+                    className="hover:text-[#2563EB] transition-colors"
+                  >
+                    {isSelected ? (
+                      <CheckSquare size={18} className="text-[#2563EB]" />
                     ) : (
-                      influencers.map((inf, index) => {
-                        const isSelected = selectedInfluencerIds.includes(inf.id);
-                        const breakdown = calculateEngagementBreakdown(inf.followersRaw, inf.engagementRate);
-                        const resonance = Math.min(Math.round(inf.engagementRate * 10 * 0.95), 98);
-                        const relevance = Math.min(Math.round(inf.safetyScore * 0.92 + inf.engagementRate * 2), 99);
-                        const reliability = Math.min(Math.round(inf.safetyScore * 0.95), 98);
-                        
-                        return (
-                          <tr 
-                            key={inf.id}
-                            className={clsx(
-                              "hover:bg-gray-50/50 transition-colors",
-                              isSelected ? "bg-blue-50/30" : ""
-                            )}
-                          >
-                            <td className="px-4 py-3">
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleSelection(inf.id);
-                                }}
-                                className="hover:text-[#2563EB] transition-colors"
-                              >
-                                {isSelected ? (
-                                  <CheckSquare size={18} className="text-[#2563EB]" />
-                                ) : (
-                                  <Square size={18} className="text-gray-400" />
-                                )}
-                              </button>
-                            </td>
-                            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                  {inf.avatarUrl ? (
-                                    <img src={inf.avatarUrl} alt={inf.name} className="w-full h-full object-cover" />
-                                  ) : (
-                                    getPlatformIcon(inf.platform, 'md')
-                                  )}
-                                </div>
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-[#1C1C1C] text-sm">{inf.name}</span>
-                                    {inf.isNew && (
-                                      <span className="h-4 px-1.5 text-[9px] font-medium rounded-full border border-[#2563EB]/30 bg-[#2563EB]/5 text-[#2563EB]/80">New</span>
-                                    )}
-                                  </div>
-                                  <div className="text-xs text-gray-400">{inf.handle}</div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="font-semibold text-[#1C1C1C]">{formatFollowersWithCommas(inf.followersRaw)}</span>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="font-semibold text-[#1C1C1C]">{breakdown.totalFormatted}</span>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-semibold border border-blue-100">
-                                {resonance}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-xs font-semibold border border-purple-100">
-                                {relevance}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-semibold border border-emerald-100">
-                                {reliability}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              {getSafetyBadge(inf.safetyScore)}
-                            </td>
-                            <td className="px-4 py-3 text-center">
-                              {getRiskBadge(inf.riskLevel)}
-                            </td>
-                            <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
-                              <div className="space-y-1.5">
-                                <div className="flex flex-wrap gap-1">
-                                  {inf.actionInsights?.strengths.slice(0, 2).map((s, i) => (
-                                    <span key={i} className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded">+ {s}</span>
-                                  ))}
-                                </div>
-                                <div className="flex flex-wrap gap-1">
-                                  {inf.actionInsights?.actions.slice(0, 2).map((a, i) => (
-                                    <span key={i} className="text-[10px] px-1.5 py-0.5 bg-sky-50 text-sky-600 rounded">→ {a}</span>
-                                  ))}
-                                </div>
-                                <div className="flex items-center gap-1 text-[10px] text-gray-400">
-                                  <Eye className="h-3 w-3" />
-                                  <span>Click for details</span>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })
+                      <Square size={18} className="text-gray-400" />
                     )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  </button>
+                </td>
+                <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      {inf.avatarUrl ? (
+                        <img src={inf.avatarUrl} alt={inf.name} className="w-full h-full object-cover" />
+                      ) : (
+                        getPlatformIcon(inf.platform, 'md')
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-[#1C1C1C] text-sm">{inf.name}</span>
+                        {inf.isNew && (
+                          <span className="h-4 px-1.5 text-[9px] font-medium rounded-full border border-[#2563EB]/30 bg-[#2563EB]/5 text-[#2563EB]/80">New</span>
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-400">{inf.handle}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span className="font-semibold text-[#1C1C1C]">{formatFollowersWithCommas(inf.followersRaw)}</span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span className="font-semibold text-[#1C1C1C]">{breakdown.totalFormatted}</span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-semibold border border-blue-100">
+                    {resonance}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-xs font-semibold border border-purple-100">
+                    {relevance}
+                  </span>
+                </td>
+                {/* NEW: CQI column - display the cqi value from influencer data */}
+                <td className="px-4 py-3 text-center">
+                  <span className={clsx(
+                    "px-2 py-0.5 rounded text-xs font-semibold border",
+                    inf.cqi >= 90 ? "bg-green-50 text-green-700 border-green-200" :
+                    inf.cqi >= 70 ? "bg-blue-50 text-blue-700 border-blue-200" :
+                    "bg-gray-50 text-gray-600 border-gray-200"
+                  )}>
+                    {inf.cqi}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-semibold border border-emerald-100">
+                    {reliability}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-center">
+                  {getSafetyBadge(inf.safetyScore)}
+                </td>
+                <td className="px-4 py-3 text-center">
+                  {getRiskBadge(inf.riskLevel)}
+                </td>
+                <td className="px-4 py-3 cursor-pointer" onClick={() => setSelectedInfluencerForModal(inf)}>
+                  <div className="space-y-1.5">
+                    <div className="flex flex-wrap gap-1">
+                      {inf.actionInsights?.strengths.slice(0, 2).map((s, i) => (
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded">+ {s}</span>
+                      ))}
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {inf.actionInsights?.actions.slice(0, 2).map((a, i) => (
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-sky-50 text-sky-600 rounded">→ {a}</span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-1 text-[10px] text-gray-400">
+                      <Eye className="h-3 w-3" />
+                      <span>Click for details</span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            );
+          })
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
 
             {/* Legend & Bottom Actions */}
             <div className="flex items-center justify-between flex-wrap gap-3">

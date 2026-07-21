@@ -595,7 +595,7 @@ useEffect(() => {
                                     <span>{budgetRemaining >= 0 ? 'Remaining Budget' : 'Over Budget'}</span>
                                     <span>{budgetRemaining >= 0 ? formatCurrency(budgetRemaining) : `-${formatCurrency(Math.abs(budgetRemaining))}`}</span>
                                 </div>
-                                <Button 
+                                {/* <Button 
                                     onClick={applyAiSuggestion} 
                                     variant="outline" 
                                     size="sm" 
@@ -603,7 +603,7 @@ useEffect(() => {
                                 >
                                     <Sparkles className="h-3 w-3 mr-2" />
                                     Apply AI-Optimized Selection
-                                </Button>
+                                </Button> */}
                             </div>
                         </CardContent>
                     </Card>
